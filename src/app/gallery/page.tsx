@@ -48,7 +48,7 @@ export default function Gallery() {
                 <div className="max-w-7xl mx-auto px-6 py-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                            <Link href="/" className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
+                            <Link href="/" className="flex items-center space-x-2 text-black hover-alt-text transition-colors">
                                 <ArrowLeft className="h-5 w-5" />
                                 <span>Back to Home</span>
                             </Link>

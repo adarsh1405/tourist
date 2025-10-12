@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Listbox, Transition } from '@headlessui/react';
 import { BookingSelection, PriceBreakdown, PricingConfig } from '@/types/booking';
 import { PricingCalculator } from '@/utils/pricing-calculator';
-import { Calendar, Users, MapPin, Car, Camera, User, Music, ArrowLeft, Check, ChevronsUpDown, Ticket, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calendar, Users, MapPin, Car, Camera, User, Music, ArrowLeft, Check, ChevronsUpDown, Ticket, ChevronDown, ChevronUp, Bed, Settings } from 'lucide-react';
 import pricingConfigData from '@/data/pricing-config.json';
 
 interface BookingFormProps {
@@ -220,7 +220,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                 <Button
                     variant="outline"
                     onClick={onBackToHome}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 text-black hover-alt-text"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back to Home
@@ -426,7 +426,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                             onClick={() => toggleCardExpansion('accommodation')}
                         >
                             <CardTitle className="flex items-center justify-between">
-                                <span>Accommodation</span>
+                                <div className="flex items-center gap-2">
+                                    <Bed className="h-5 w-5" />
+                                    Accommodation
+                                </div>                                
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.accommodation && (
                                         <span className="text-sm text-gray-600 font-normal">
@@ -525,7 +528,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                             onClick={() => toggleCardExpansion('addOns')}
                         >
                             <CardTitle className="flex items-center justify-between">
-                                <span>Additional Services</span>
+                                <div className="flex items-center gap-2">
+                                    <Settings className="h-5 w-5" />
+                                    Additional Services
+                                </div>
+                                    
+                                
+                                
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.addOns && (
                                         <span className="text-sm text-gray-600 font-normal">
