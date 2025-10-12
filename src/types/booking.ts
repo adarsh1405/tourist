@@ -10,6 +10,7 @@ export interface AccommodationOption {
     name: string;
     pricePerNight: number;
     description: string;
+    extraCostPerPerson?: number;
 }
 
 export interface MealOption {
@@ -22,6 +23,7 @@ export interface TransportOption {
     name: string;
     pricePerDay: number;
     description: string;
+    extraCostPerPerson?: number;
 }
 
 export interface AddOnService {
@@ -29,6 +31,7 @@ export interface AddOnService {
     price?: number;
     pricePerDay?: number;
     description: string;
+    extraCostPerPerson?: number;
 }
 
 export interface Destination {
@@ -37,7 +40,6 @@ export interface Destination {
     availablePackages: Record<string, BasePackage>;
     accommodationOptions: Record<string, AccommodationOption>;
     mealOptions: Record<string, MealOption>;
-    transportOptions: Record<string, TransportOption>;
     addOnServices: Record<string, AddOnService>;
 }
 
@@ -75,9 +77,10 @@ export interface BookingSelection {
     selectedPackages: string[];
     accommodation: string;
     meals: string;
-    transport: string;
     addOns: string[];
     numberOfPeople: number;
+    numberOfChildren: number; // Children under 11 years
+    numberOfRooms: number;
     startDate: string;
     season: string;
     appliedCoupon?: string;
@@ -87,7 +90,6 @@ export interface PriceBreakdown {
     basePackagePrice: number;
     accommodationPrice: number;
     mealPrice: number;
-    transportPrice: number;
     addOnPrice: number;
     subtotal: number;
     seasonalAdjustment: number;
@@ -95,4 +97,11 @@ export interface PriceBreakdown {
     couponDiscount: number;
     finalTotal: number;
     pricePerPerson: number;
+    roomDetails: {
+        totalRooms: number;
+        peoplePerRoom: number[];
+        roomRate: number;
+        totalAccommodationCost: number;
+    };
+    childrenDiscount: number;
 }

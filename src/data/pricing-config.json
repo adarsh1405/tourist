@@ -72,20 +72,28 @@
                 }
             },
             "accommodationOptions": {
+                "none": {
+                    "name": "No Accommodation",
+                    "pricePerNight": 0,
+                    "description": "Day tours only - no overnight stay"
+                },
                 "budget": {
                     "name": "Budget Hotels",
                     "pricePerNight": 800,
-                    "description": "Clean and comfortable budget accommodations"
+                    "description": "Clean and comfortable budget accommodations",
+                    "extraCostPerPerson": 0
                 },
                 "standard": {
                     "name": "Standard Hotels",
                     "pricePerNight": 1500,
-                    "description": "Well-appointed rooms with modern amenities"
+                    "description": "Well-appointed rooms with modern amenities",
+                    "extraCostPerPerson": 300
                 },
                 "luxury": {
                     "name": "Luxury Hotels",
                     "pricePerNight": 3500,
-                    "description": "Premium hotels with sea view and luxury amenities"
+                    "description": "Premium hotels with sea view and luxury amenities",
+                    "extraCostPerPerson": 800
                 }
             },
             "mealOptions": {
@@ -105,23 +113,6 @@
                     "description": "Mixed cuisine with local specialties"
                 }
             },
-            "transportOptions": {
-                "ac-car": {
-                    "name": "AC Car",
-                    "pricePerDay": 2000,
-                    "description": "Comfortable AC car for local transportation"
-                },
-                "tempo-traveller": {
-                    "name": "Tempo Traveller",
-                    "pricePerDay": 3500,
-                    "description": "For groups of 8-12 people"
-                },
-                "luxury-coach": {
-                    "name": "Luxury Coach",
-                    "pricePerDay": 5000,
-                    "description": "Premium coach for larger groups"
-                }
-            },
             "addOnServices": {
                 "photography": {
                     "name": "Professional Photography",
@@ -138,6 +129,18 @@
                     "name": "Cultural Performance",
                     "price": 1500,
                     "description": "Traditional Odissi dance and music performance"
+                },
+                "transport-scooty-downgrade": {
+                    "name": "Downgrade: Rent Scooty",
+                    "pricePerDay": 0,
+                    "description": "Self-drive scooty rental - budget option",
+                    "extraCostPerPerson": -500
+                },
+                "transport-upgrade": {
+                    "name": "Upgrade Transportation",
+                    "pricePerDay": 0,
+                    "description": "Premium transportation upgrade",
+                    "extraCostPerPerson": 500
                 }
             }
         }

@@ -41,6 +41,17 @@ interface Review {
     location: string;
 }
 
+interface TourPackage {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    duration: number;
+    image: string;
+    inclusions: string[];
+    exclusions: string[];
+}
+
 const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const reviewsScrollContainerRef = useRef<HTMLDivElement>(null);
@@ -149,7 +160,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                 '/images/destinations/pipili-handicrafts.jpg'
             ],
             description: 'Famous for colorful appliqué work and traditional Odishan handicrafts.',
-            highlights: ['Appliqué Work','Traditional Art', 'Cultural Heritage','Handicrafts','Shopping'],
+            highlights: ['Appliqué Work', 'Traditional Art', 'Cultural Heritage', 'Handicrafts', 'Shopping'],
             rating: 4.4,
             reviews: 567,
             googleMapsLink: 'https://maps.google.com/?q=Pipili+Puri+Odisha'
@@ -188,6 +199,145 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             comment: 'Professional service from start to finish. The cultural village tour was the highlight of our trip. Will definitely book again!',
             date: '2023-12-28',
             location: 'Bangalore'
+        }
+    ];
+
+    const tourPackages: TourPackage[] = [
+        {
+            id: 'puri-day-tour',
+            name: 'Puri Day Tour',
+            description: 'Visit Jagannath Temple and Puri Beach in a single day',
+            price: 1500,
+            duration: 1,
+            image: '/images/destinations/jagannath-temple-1.jpg',
+            inclusions: [
+                'Jagannath Temple visit',
+                'Puri Beach exploration',
+                'Local guide services',
+                'AC transportation',
+                'Entry fees included',
+                'Refreshments'
+            ],
+            exclusions: [
+                'Personal expenses',
+                'Meals (lunch/dinner)',
+                'Shopping costs',
+                'Tips for guide'
+            ]
+        },
+        {
+            id: 'chilika-tour',
+            name: 'Chilika Lake Tour',
+            description: 'Experience Asia\'s largest brackish water lagoon with dolphin watching',
+            price: 2000,
+            duration: 1,
+            image: '/images/destinations/chilika-lake-dolphins.jpg',
+            inclusions: [
+                'Chilika Lake boat ride',
+                'Dolphin watching experience',
+                'Bird sanctuary visit',
+                'Professional guide',
+                'Transportation to/from lake',
+                'Life jackets provided'
+            ],
+            exclusions: [
+                'Personal expenses',
+                'Food and beverages',
+                'Camera charges',
+                'Extra boat rides'
+            ]
+        },
+        {
+            id: 'konark-tour',
+            name: 'Konark Sun Temple Tour',
+            description: 'Explore the UNESCO World Heritage Site and architectural marvel',
+            price: 1800,
+            duration: 1,
+            image: '/images/destinations/konark-temple-front.jpg',
+            inclusions: [
+                'Konark Sun Temple visit',
+                'Chandrabhaga Beach time',
+                'Archaeological museum',
+                'Expert guide commentary',
+                'Transportation included',
+                'Entry tickets'
+            ],
+            exclusions: [
+                'Personal shopping',
+                'Meals and snacks',
+                'Photography fees',
+                'Additional activities'
+            ]
+        },
+        {
+            id: 'golden-triangle',
+            name: 'Golden Triangle Package',
+            description: 'Complete 3-day Odisha temple circuit with accommodation',
+            price: 4500,
+            duration: 3,
+            image: '/images/destinations/jagannath-temple-2.jpg',
+            inclusions: [
+                'All major temples visit',
+                'Konark Sun Temple',
+                'Puri Beach activities',
+                '2 nights accommodation',
+                'All meals included',
+                'AC transportation',
+                'Professional guide',
+                'Entry fees covered'
+            ],
+            exclusions: [
+                'Personal laundry',
+                'Telephone expenses',
+                'Alcoholic beverages',
+                'Travel insurance',
+                'Extra sightseeing'
+            ]
+        },
+        {
+            id: 'cultural-heritage',
+            name: 'Cultural Heritage Tour',
+            description: 'Explore traditional art villages and handicraft centers',
+            price: 2200,
+            duration: 1,
+            image: '/images/destinations/raghurajpur-pattachitra.jpg',
+            inclusions: [
+                'Raghurajpur village visit',
+                'Pipili applique workshop',
+                'Traditional art demonstration',
+                'Interaction with artists',
+                'Cultural guide',
+                'Transportation'
+            ],
+            exclusions: [
+                'Art purchases',
+                'Personal expenses',
+                'Meals',
+                'Photography charges'
+            ]
+        },
+        {
+            id: 'spiritual-journey',
+            name: 'Spiritual Journey',
+            description: 'Experience the spiritual essence of Odisha temples',
+            price: 3200,
+            duration: 2,
+            image: '/images/destinations/lingaraj.jpg',
+            inclusions: [
+                'Multiple temple visits',
+                'Spiritual guide service',
+                'Aarti participation',
+                'Overnight accommodation',
+                'Vegetarian meals',
+                'Transportation',
+                'Religious ceremonies'
+            ],
+            exclusions: [
+                'Non-vegetarian meals',
+                'Personal offerings',
+                'Shopping expenses',
+                'Extra temple visits'
+            ]
         }
     ];
 
@@ -368,7 +518,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                                                     backgroundPosition: 'center'
                                                 }}
                                             >
-                                                
+
                                             </div>
 
                                             {/* Image Navigation */}
@@ -498,6 +648,143 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                 </div>
             </section>
 
+            {/* Tour Packages Section */}
+            <section className="py-20 px-6 bg-white">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl font-bold text-gray-900 mb-4">Tour Packages</h2>
+                        <p className="text-xl text-gray-600">Choose from our carefully crafted tour packages</p>
+                    </div>
+
+                    <div className="relative">
+                        <div className="flex items-center justify-between mb-6">
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    const container = document.getElementById('packages-container');
+                                    if (container) {
+                                        container.scrollBy({ left: -420, behavior: 'smooth' });
+                                    }
+                                }}
+                                className="p-3 rounded-full shadow-md hover:shadow-lg text-black hover-alt-text"
+                            >
+                                <ChevronLeft className="h-6 w-6" />
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    const container = document.getElementById('packages-container');
+                                    if (container) {
+                                        container.scrollBy({ left: 420, behavior: 'smooth' });
+                                    }
+                                }}
+                                className="p-3 rounded-full shadow-md hover:shadow-lg text-black hover-alt-text"
+                            >
+                                <ChevronRight className="h-6 w-6" />
+                            </Button>
+                        </div>
+
+                        <div
+                            id="packages-container"
+                            className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide"
+                            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                        >
+                            {tourPackages.map((pkg: TourPackage) => (
+                                <div key={pkg.id} className="flex-none w-[420px] relative h-[480px] perspective-1000">
+                                    <div className="flip-card w-full h-full relative transform-style-preserve-3d transition-transform duration-700 hover:rotate-y-180">
+                                        {/* Front of Card */}
+                                        <div className="flip-card-front absolute w-full h-full backface-hidden">
+                                            <Card className="h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                                <div
+                                                    className="h-56 bg-gradient-to-br from-blue-200 to-orange-200 flex items-center justify-center relative"
+                                                    style={{
+                                                        backgroundImage: pkg.image ? `url(${pkg.image})` : undefined,
+                                                        backgroundSize: 'cover',
+                                                        backgroundPosition: 'center'
+                                                    }}
+                                                >
+                                                    <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                                                    <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
+                                                        <span className="text-sm font-semibold text-gray-900">{pkg.duration} Day{pkg.duration > 1 ? 's' : ''}</span>
+                                                    </div>
+                                                </div>
+                                                <CardContent className="p-6">
+                                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{pkg.name}</h3>
+                                                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{pkg.description}</p>
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <div className="text-2xl font-bold text-orange-600">
+                                                            ₹{pkg.price.toLocaleString()}
+                                                            <span className="text-sm text-gray-500 font-normal">/person</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <span className="text-sm text-gray-500 italic">Hover to see details</span>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+
+                                        {/* Back of Card */}
+                                        <div className="flip-card-back absolute w-full h-full backface-hidden rotate-y-180">
+                                            <Card className="h-full overflow-hidden shadow-lg">
+                                                <CardContent className="p-6 h-full flex flex-col">
+                                                    <h3 className="text-lg font-bold text-gray-900 mb-4">{pkg.name}</h3>
+
+                                                    {/* Inclusions */}
+                                                    <div className="mb-4 flex-1">
+                                                        <h4 className="font-semibold text-green-600 mb-2 flex items-center">
+                                                            <span className="mr-2">✓</span>
+                                                            Inclusions
+                                                        </h4>
+                                                        <ul className="text-sm text-gray-600 space-y-1">
+                                                            {pkg.inclusions.slice(0, 6).map((item: string, index: number) => (
+                                                                <li key={index} className="flex items-start">
+                                                                    <span className="text-green-500 mr-2 mt-1">•</span>
+                                                                    {item}
+                                                                </li>
+                                                            ))}
+                                                            {pkg.inclusions.length > 6 && (
+                                                                <li className="text-gray-400 text-xs">
+                                                                    +{pkg.inclusions.length - 6} more items
+                                                                </li>
+                                                            )}
+                                                        </ul>
+                                                    </div>
+
+                                                    {/* Exclusions */}
+                                                    <div className="mb-4">
+                                                        <h4 className="font-semibold text-red-600 mb-2 flex items-center">
+                                                            <span className="mr-2">✗</span>
+                                                            Exclusions
+                                                        </h4>
+                                                        <ul className="text-sm text-gray-600 space-y-1">
+                                                            {pkg.exclusions.slice(0, 4).map((item: string, index: number) => (
+                                                                <li key={index} className="flex items-start">
+                                                                    <span className="text-red-500 mr-2 mt-1">•</span>
+                                                                    {item}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+
+                                                    {/* Book Now Button */}
+                                                    <button
+                                                        onClick={onStartBooking}
+                                                        className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold"
+                                                    >
+                                                        Book Now - ₹{pkg.price.toLocaleString()}
+                                                    </button>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Company Features */}
             <section className="py-20 px-6 bg-gradient-to-br from-blue-50 to-orange-50">
                 <div className="max-w-6xl mx-auto">
@@ -594,9 +881,9 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
 
                                         <p className="text-xs text-gray-400">
                                             {new Date(review.date).toLocaleDateString('en-IN', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric'
                                             })}
                                         </p>
                                     </Card>

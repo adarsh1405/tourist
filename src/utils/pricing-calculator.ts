@@ -23,7 +23,10 @@ export class PricingCalculator {
             const pkg = destination.availablePackages[packageKey];
             if (pkg) {
                 totalDays = pkg.duration;
-                basePackagePrice = pkg.basePricePerPerson * selection.numberOfPeople;
+                // Children under 11 get 50% discount on package price
+                const adultPrice = pkg.basePricePerPerson * (selection.numberOfPeople - selection.numberOfChildren);
+                const childPrice = pkg.basePricePerPerson * selection.numberOfChildren * 0.5;
+                basePackagePrice = adultPrice + childPrice;
             }
         } else if (selection.selectedPackages.length > 1) {
             // Multiple packages - sum up all durations (assuming they're sequential)
@@ -31,7 +34,10 @@ export class PricingCalculator {
                 const pkg = destination.availablePackages[packageKey];
                 if (pkg) {
                     totalDays += pkg.duration;
-                    basePackagePrice += pkg.basePricePerPerson * selection.numberOfPeople;
+                    // Children under 11 get 50% discount on package price
+                    const adultPrice = pkg.basePricePerPerson * (selection.numberOfPeople - selection.numberOfChildren);
+                    const childPrice = pkg.basePricePerPerson * selection.numberOfChildren * 0.5;
+                    basePackagePrice += adultPrice + childPrice;
                 }
             });
         }
@@ -40,45 +46,79 @@ export class PricingCalculator {
         const nights = Math.max(0, totalDays - 1);
         const days = totalDays;
 
-        // Calculate accommodation price based on nights needed
+        // Calculate accommodation price based on rooms logic
         const accommodation = destination.accommodationOptions[selection.accommodation];
         let accommodationPrice = 0;
-        if (nights > 0) {
-            // Calculate rooms needed (assuming 2 people per room)
-            const roomsNeeded = Math.ceil(selection.numberOfPeople / 2);
-            accommodationPrice = accommodation.pricePerNight * nights * roomsNeeded;
+        let accommodationUpgradeCost = 0;
+        const roomDetails = {
+            totalRooms: selection.numberOfRooms,
+            peoplePerRoom: [] as number[],
+            roomRate: accommodation.pricePerNight,
+            totalAccommodationCost: 0
+        };
+
+        if (nights > 0 && selection.accommodation !== 'none') {
+            // Calculate room allocation (max 3 people per room)
+            const totalPeople = selection.numberOfPeople + selection.numberOfChildren;
+            roomDetails.peoplePerRoom = this.calculateRoomAllocation(totalPeople, selection.numberOfRooms);
+            accommodationPrice = accommodation.pricePerNight * nights * selection.numberOfRooms;
+
+            // Add per-person upgrade cost
+            if (accommodation.extraCostPerPerson) {
+                accommodationUpgradeCost = accommodation.extraCostPerPerson * totalPeople * nights;
+                accommodationPrice += accommodationUpgradeCost;
+            }
+
+            roomDetails.totalAccommodationCost = accommodationPrice;
         }
 
-        // Calculate meal price
+        // Calculate meal price (children under 11 get 50% discount)
         const meal = destination.mealOptions[selection.meals];
-        const mealPrice = meal.pricePerDay * days * selection.numberOfPeople;
-
-        // Calculate transport price
-        const transport = destination.transportOptions[selection.transport];
-        const transportPrice = transport.pricePerDay * days;
-
-        // Calculate add-on services price
+        const adultMealPrice = meal.pricePerDay * days * (selection.numberOfPeople - selection.numberOfChildren);
+        const childMealPrice = meal.pricePerDay * days * selection.numberOfChildren * 0.5;
+        const mealPrice = adultMealPrice + childMealPrice;        // Calculate add-on services price (including transportation)
         let addOnPrice = 0;
+
         selection.addOns.forEach(addOnKey => {
             const addOn = destination.addOnServices[addOnKey];
+
             if (addOn) {
+                // Add base price (either per day or fixed)
                 if (addOn.pricePerDay) {
                     addOnPrice += addOn.pricePerDay * days;
                 } else if (addOn.price) {
                     addOnPrice += addOn.price;
                 }
+
+                // Add per-person upgrade/downgrade cost for transportation add-ons
+                if (addOnKey.startsWith('transport-') && addOn.extraCostPerPerson) {
+                    const totalPeople = selection.numberOfPeople + selection.numberOfChildren;
+                    const transportCost = addOn.extraCostPerPerson * totalPeople * days;
+                    addOnPrice += transportCost;
+                }
             }
         });
 
+        // Calculate children discount amount
+        const childrenPackageDiscount = selection.selectedPackages.reduce((total, packageKey) => {
+            const pkg = destination.availablePackages[packageKey];
+            if (pkg) {
+                return total + (pkg.basePricePerPerson * selection.numberOfChildren * 0.5);
+            }
+            return total;
+        }, 0);
+        const childrenMealDiscount = meal.pricePerDay * days * selection.numberOfChildren * 0.5;
+        const childrenDiscount = childrenPackageDiscount + childrenMealDiscount;
+
         // Calculate subtotal
-        const subtotal = basePackagePrice + accommodationPrice + mealPrice + transportPrice + addOnPrice;
+        const subtotal = basePackagePrice + accommodationPrice + mealPrice + addOnPrice;
 
         // Apply seasonal pricing
         const seasonalMultiplier = this.config.seasonalPricing[selection.season]?.multiplier || 1;
         const seasonalAdjustment = subtotal * (seasonalMultiplier - 1);
 
         // Apply group discount
-        const groupDiscountKey = this.getGroupDiscountKey(selection.numberOfPeople);
+        const groupDiscountKey = this.getGroupDiscountKey(selection.numberOfPeople + selection.numberOfChildren);
         const groupMultiplier = this.config.groupDiscounts[groupDiscountKey]?.multiplier || 1;
         const afterSeasonal = subtotal + seasonalAdjustment;
         const groupDiscount = afterSeasonal * (1 - groupMultiplier);
@@ -88,21 +128,42 @@ export class PricingCalculator {
 
         // Calculate final total
         const finalTotal = afterSeasonal - groupDiscount - couponDiscount;
-        const pricePerPerson = finalTotal / selection.numberOfPeople;
+        const pricePerPerson = finalTotal / (selection.numberOfPeople + selection.numberOfChildren);
 
         return {
             basePackagePrice,
             accommodationPrice,
             mealPrice,
-            transportPrice,
             addOnPrice,
             subtotal,
             seasonalAdjustment,
             groupDiscount,
             couponDiscount,
             finalTotal,
-            pricePerPerson
+            pricePerPerson,
+            roomDetails,
+            childrenDiscount
         };
+    }
+
+    private calculateRoomAllocation(totalPeople: number, requestedRooms: number): number[] {
+        const peoplePerRoom: number[] = [];
+        let remainingPeople = totalPeople;
+
+        // Distribute people across rooms (max 3 per room)
+        for (let i = 0; i < requestedRooms; i++) {
+            if (remainingPeople <= 0) {
+                peoplePerRoom.push(0);
+            } else if (remainingPeople <= 3) {
+                peoplePerRoom.push(remainingPeople);
+                remainingPeople = 0;
+            } else {
+                peoplePerRoom.push(3);
+                remainingPeople -= 3;
+            }
+        }
+
+        return peoplePerRoom;
     }
 
     private calculateCouponDiscount(selection: BookingSelection, amountAfterOtherDiscounts: number): number {
@@ -133,13 +194,6 @@ export class PricingCalculator {
 
         // Ensure discount doesn't exceed the total amount
         return Math.min(discount, amountAfterOtherDiscounts);
-    }
-
-    private calculateNights(startDate: string, endDate: string): number {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        const timeDiff = end.getTime() - start.getTime();
-        return Math.max(1, Math.ceil(timeDiff / (1000 * 3600 * 24)));
     }
 
     private getGroupDiscountKey(numberOfPeople: number): string {

@@ -17,11 +17,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
     const [selection, setSelection] = useState<BookingSelection>({
         destination: 'puri',
         selectedPackages: [],
-        accommodation: 'standard',
+        accommodation: 'none',
         meals: 'included',
-        transport: 'ac-car',
         addOns: [],
         numberOfPeople: 2,
+        numberOfChildren: 0,
+        numberOfRooms: 1,
         startDate: '',
         season: 'normal',
         appliedCoupon: undefined
@@ -31,13 +32,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
     const [couponCode, setCouponCode] = useState<string>('');
     const [couponError, setCouponError] = useState<string>('');
     const [couponSuccess, setCouponSuccess] = useState<string>('');
-    
+
     // State for managing card expansion
     const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({
         travelDetails: true,  // Start with travel details expanded since it's most important
         packages: false,
         accommodation: false,
-        transportation: false,
         addOns: false
     });
 
@@ -65,14 +65,18 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                 console.error('Error calculating price:', error);
                 setPriceBreakdown(null);
             }
+        } else {
+            // Reset price breakdown if conditions not met
+            setPriceBreakdown(null);
         }
     }, [
         selection.startDate,
         selection.selectedPackages,
         selection.numberOfPeople,
+        selection.numberOfChildren,
+        selection.numberOfRooms,
         selection.accommodation,
         selection.meals,
-        selection.transport,
         selection.addOns,
         selection.season,
         selection.appliedCoupon,
@@ -126,21 +130,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
     const getCardSummary = (cardKey: string) => {
         switch (cardKey) {
             case 'travelDetails':
-                return selection.startDate 
-                    ? `${formatDateDisplay(selection.startDate)} • ${selection.numberOfPeople} people` 
-                    : 'Select travel date and group size';
+                return selection.startDate
+                    ? `${formatDateDisplay(selection.startDate)} • ${selection.numberOfPeople} adults, ${selection.numberOfChildren} children • ${selection.numberOfRooms} room${selection.numberOfRooms > 1 ? 's' : ''}`
+                    : 'Select travel date, group size, and rooms';
             case 'packages':
-                return selection.selectedPackages.length > 0 
+                return selection.selectedPackages.length > 0
                     ? `${selection.selectedPackages.length} package${selection.selectedPackages.length > 1 ? 's' : ''} selected`
-                    : 'No packages selected';
-            case 'accommodation':
+                    : 'No packages selected'; case 'accommodation':
                 const acc = destination.accommodationOptions[selection.accommodation];
-                return `${acc.name} - ${formatPrice(acc.pricePerNight)}/night`;
-            case 'transportation':
-                const transport = destination.transportOptions[selection.transport];
-                return `${transport.name} - ${formatPrice(transport.pricePerDay)}/day`;
+                if (selection.accommodation === 'none') {
+                    return 'No accommodation - Day tours only';
+                }
+                return `${acc.name}${acc.extraCostPerPerson ? ` (+${formatPrice(acc.extraCostPerPerson)}/person)` : ''} - ${formatPrice(acc.pricePerNight)}/night`;
             case 'addOns':
-                return selection.addOns.length > 0 
+                return selection.addOns.length > 0
                     ? `${selection.addOns.length} add-on${selection.addOns.length > 1 ? 's' : ''} selected`
                     : 'No add-ons selected';
             default:
@@ -237,7 +240,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                 <div className="space-y-6">
                     {/* Travel Details */}
                     <Card>
-                        <CardHeader 
+                        <CardHeader
                             className="cursor-pointer hover:bg-gray-50 transition-colors"
                             onClick={() => toggleCardExpansion('travelDetails')}
                         >
@@ -273,7 +276,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                             className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         />
                                         {selection.startDate && (
-                                            <p className="text-sm text-gray-600 mt-1">
+                                            <p className="text-xs text-gray-500 mt-1">
                                                 Selected: {formatDateDisplay(selection.startDate)}
                                             </p>
                                         )}
@@ -281,7 +284,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                     <div>
                                         <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                                             <Users className="h-4 w-4" />
-                                            Number of People
+                                            Number of Adults
                                         </label>
                                         <input
                                             type="number"
@@ -293,6 +296,56 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                         />
                                     </div>
                                 </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                                            <User className="h-4 w-4" />
+                                            Children (under 11 years)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="20"
+                                            value={selection.numberOfChildren}
+                                            onChange={(e) => handleInputChange('numberOfChildren', parseInt(e.target.value) || 0)}
+                                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">50% discount on packages & meals</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                                            <Bed className="h-4 w-4" />
+                                            Number of Rooms
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min={Math.ceil((selection.numberOfPeople + selection.numberOfChildren) / 3)}
+                                            max="20"
+                                            value={selection.numberOfRooms}
+                                            onChange={(e) => handleInputChange('numberOfRooms', parseInt(e.target.value) || 1)}
+                                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">Max 3 people per room</p>
+                                    </div>
+                                </div>
+
+                                {/* Room allocation display */}
+                                {(selection.numberOfPeople + selection.numberOfChildren > 0) && selection.numberOfRooms > 0 && (
+                                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                        <h4 className="text-sm font-medium text-blue-900 mb-2">Room Allocation:</h4>
+                                        <div className="text-sm text-blue-800">
+                                            Total People: {selection.numberOfPeople + selection.numberOfChildren} ({selection.numberOfPeople} adults + {selection.numberOfChildren} children)
+                                            <br />
+                                            Recommended Rooms: {Math.ceil((selection.numberOfPeople + selection.numberOfChildren) / 3)}
+                                            {selection.numberOfRooms < Math.ceil((selection.numberOfPeople + selection.numberOfChildren) / 3) && (
+                                                <div className="text-red-600 mt-1">
+                                                    ⚠️ Warning: You may need more rooms (max 3 people per room)
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {selection.season && (
                                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
@@ -310,7 +363,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
 
                     {/* Package Selection */}
                     <Card>
-                        <CardHeader 
+                        <CardHeader
                             className="cursor-pointer hover:bg-gray-50 transition-colors"
                             onClick={() => toggleCardExpansion('packages')}
                         >
@@ -421,7 +474,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
 
                     {/* Accommodation */}
                     <Card>
-                        <CardHeader 
+                        <CardHeader
                             className="cursor-pointer hover:bg-gray-50 transition-colors"
                             onClick={() => toggleCardExpansion('accommodation')}
                         >
@@ -429,7 +482,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                 <div className="flex items-center gap-2">
                                     <Bed className="h-5 w-5" />
                                     Accommodation
-                                </div>                                
+                                </div>
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.accommodation && (
                                         <span className="text-sm text-gray-600 font-normal">
@@ -457,62 +510,28 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                             onClick={() => handleInputChange('accommodation', key)}
                                         >
                                             <div className="flex justify-between items-center">
-                                                <div>
-                                                    <h4 className="font-medium">{option.name}</h4>
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-medium">{option.name}</h4>
+                                                        {key !== 'none' && option.extraCostPerPerson && (
+                                                            <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                                                +{formatPrice(option.extraCostPerPerson)}/person
+                                                            </span>
+                                                        )}
+                                                        {key === 'none' && (
+                                                            <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">
+                                                                Free
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                     <p className="text-sm text-gray-600">{option.description}</p>
                                                 </div>
-                                                <p className="font-semibold">{formatPrice(option.pricePerNight)}/night</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </CardContent>
-                        )}
-                    </Card>
-
-                    {/* Transportation */}
-                    <Card>
-                        <CardHeader 
-                            className="cursor-pointer hover:bg-gray-50 transition-colors"
-                            onClick={() => toggleCardExpansion('transportation')}
-                        >
-                            <CardTitle className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Car className="h-5 w-5" />
-                                    Transportation
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    {!expandedCards.transportation && (
-                                        <span className="text-sm text-gray-600 font-normal">
-                                            {getCardSummary('transportation')}
-                                        </span>
-                                    )}
-                                    {expandedCards.transportation ? (
-                                        <ChevronUp className="h-4 w-4 text-gray-500" />
-                                    ) : (
-                                        <ChevronDown className="h-4 w-4 text-gray-500" />
-                                    )}
-                                </div>
-                            </CardTitle>
-                        </CardHeader>
-                        {expandedCards.transportation && (
-                            <CardContent>
-                                <div className="space-y-3">
-                                    {Object.entries(destination.transportOptions).map(([key, option]) => (
-                                        <div
-                                            key={key}
-                                            className={`p-3 border rounded-lg cursor-pointer transition-all ${selection.transport === key
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 hover:border-gray-300'
-                                                }`}
-                                            onClick={() => handleInputChange('transport', key)}
-                                        >
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <h4 className="font-medium">{option.name}</h4>
-                                                    <p className="text-sm text-gray-600">{option.description}</p>
+                                                <div className="text-right">
+                                                    <p className="font-semibold">{option.pricePerNight > 0 ? formatPrice(option.pricePerNight) : 'Free'}{option.pricePerNight > 0 ? '/night' : ''}</p>
+                                                    {key !== 'none' && option.extraCostPerPerson && (
+                                                        <p className="text-xs text-gray-500">Per person upgrade</p>
+                                                    )}
                                                 </div>
-                                                <p className="font-semibold">{formatPrice(option.pricePerDay)}/day</p>
                                             </div>
                                         </div>
                                     ))}
@@ -523,7 +542,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
 
                     {/* Add-on Services */}
                     <Card>
-                        <CardHeader 
+                        <CardHeader
                             className="cursor-pointer hover:bg-gray-50 transition-colors"
                             onClick={() => toggleCardExpansion('addOns')}
                         >
@@ -532,9 +551,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                     <Settings className="h-5 w-5" />
                                     Additional Services
                                 </div>
-                                    
-                                
-                                
+
+
+
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.addOns && (
                                         <span className="text-sm text-gray-600 font-normal">
@@ -569,15 +588,33 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                                     {key === 'photography' && <Camera className="h-5 w-5" />}
                                                     {key === 'guide' && <User className="h-5 w-5" />}
                                                     {key === 'cultural-show' && <Music className="h-5 w-5" />}
-                                                    <div>
-                                                        <h4 className="font-medium">{service.name}</h4>
+                                                    {key.startsWith('transport-') && <Car className="h-5 w-5" />}
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <h4 className="font-medium">{service.name}</h4>
+                                                            {key.startsWith('transport-') && service.extraCostPerPerson && (
+                                                                <span className={`text-xs px-2 py-1 rounded-full ${service.extraCostPerPerson < 0
+                                                                    ? 'bg-green-100 text-green-600'
+                                                                    : 'bg-orange-100 text-orange-600'
+                                                                    }`}>
+                                                                    {service.extraCostPerPerson < 0 ? '' : '+'}{formatPrice(service.extraCostPerPerson)}/person
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                         <p className="text-sm text-gray-600">{service.description}</p>
                                                     </div>
                                                 </div>
-                                                <p className="font-semibold">
-                                                    {service.price ? formatPrice(service.price) : formatPrice(service.pricePerDay || 0)}
-                                                    {service.pricePerDay && '/day'}
-                                                </p>
+                                                <div className="text-right">
+                                                    <p className="font-semibold">
+                                                        {service.price ? formatPrice(service.price) : formatPrice(service.pricePerDay || 0)}
+                                                        {service.pricePerDay && '/day'}
+                                                    </p>
+                                                    {key.startsWith('transport-') && service.extraCostPerPerson && (
+                                                        <p className="text-xs text-gray-500">
+                                                            Per person {service.extraCostPerPerson < 0 ? 'discount' : 'upgrade'}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -597,11 +634,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                         <CardContent>
                             {priceBreakdown && selection.selectedPackages.length > 0 ? (
                                 <div className="space-y-4">
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between">
-                                            <span>Selected Packages ({selection.numberOfPeople} people)</span>
-                                            <span>{formatPrice(priceBreakdown.basePackagePrice)}</span>
-                                        </div>
+                                    <div className="space-y-2">                        <div className="flex justify-between">
+                                        <span>Selected Packages ({selection.numberOfPeople} adults{selection.numberOfChildren > 0 ? `, ${selection.numberOfChildren} children` : ''})</span>
+                                        <span>{formatPrice(priceBreakdown.basePackagePrice)}</span>
+                                    </div>
+                                        {selection.numberOfChildren > 0 && (
+                                            <div className="text-sm text-green-600 ml-4">
+                                                • Children discount applied: 50% off packages & meals
+                                            </div>
+                                        )}
                                         <div className="text-sm text-gray-600 ml-4">
                                             {selection.selectedPackages.map(pkgKey => {
                                                 const pkg = destination.availablePackages[pkgKey];
@@ -615,32 +656,40 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                             </div>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span>Accommodation</span>
-                                            <span>{priceBreakdown.accommodationPrice > 0 ? formatPrice(priceBreakdown.accommodationPrice) : 'Not Required'}</span>
+                                            <span>Accommodation {selection.accommodation !== 'none' ? 'Upgrade' : ''}</span>
+                                            <span>{priceBreakdown.accommodationPrice > 0 ? formatPrice(priceBreakdown.accommodationPrice) : 'Not Selected'}</span>
                                         </div>
                                         {priceBreakdown.accommodationPrice > 0 && (
                                             <div className="text-sm text-gray-600 ml-4">
                                                 • {destination.accommodationOptions[selection.accommodation].name} - {destination.accommodationOptions[selection.accommodation].description}
-                                                <br />• {totalNights} night{totalNights > 1 ? 's' : ''} × {Math.ceil(selection.numberOfPeople / 2)} room{Math.ceil(selection.numberOfPeople / 2) > 1 ? 's' : ''} × {formatPrice(destination.accommodationOptions[selection.accommodation].pricePerNight)}/night
+                                                <br />• {totalNights} night{totalNights > 1 ? 's' : ''} × {selection.numberOfRooms} room{selection.numberOfRooms > 1 ? 's' : ''} × {formatPrice(destination.accommodationOptions[selection.accommodation].pricePerNight)}/night
+                                                {destination.accommodationOptions[selection.accommodation].extraCostPerPerson && (
+                                                    <>
+                                                        <br />• Upgrade cost: {formatPrice(destination.accommodationOptions[selection.accommodation].extraCostPerPerson!)}/person/night
+                                                    </>
+                                                )}
+                                                <br />• Room allocation: {priceBreakdown.roomDetails.peoplePerRoom.map((people, index) =>
+                                                    `Room ${index + 1}: ${people} ${people === 1 ? 'person' : 'people'}`
+                                                ).join(', ')}
+                                                {selection.numberOfRooms < Math.ceil((selection.numberOfPeople + selection.numberOfChildren) / 3) && (
+                                                    <div className="text-red-600">
+                                                        ⚠️ Consider booking {Math.ceil((selection.numberOfPeople + selection.numberOfChildren) / 3)} rooms for comfort
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
-                                        {priceBreakdown.accommodationPrice === 0 && (
+                                        {selection.accommodation === 'none' && (
                                             <div className="text-sm text-gray-500 ml-4">
-                                                • No overnight stay required for day tours
+                                                • Day tours only - no overnight accommodation
                                             </div>
                                         )}
-                                        <div className="flex justify-between">
-                                            <span>Transportation</span>
-                                            <span>{formatPrice(priceBreakdown.transportPrice)}</span>
-                                        </div>
-                                        <div className="text-sm text-gray-600 ml-4">
-                                            • {destination.transportOptions[selection.transport].name} - {destination.transportOptions[selection.transport].description}
-                                        </div>
-                                        {priceBreakdown.addOnPrice > 0 && (
+                                        {selection.addOns.length > 0 && (
                                             <>
                                                 <div className="flex justify-between">
                                                     <span>Additional Services</span>
-                                                    <span>{formatPrice(priceBreakdown.addOnPrice)}</span>
+                                                    <span className={priceBreakdown.addOnPrice < 0 ? 'text-green-600' : ''}>
+                                                        {priceBreakdown.addOnPrice < 0 ? '' : '+'}{formatPrice(priceBreakdown.addOnPrice)}
+                                                    </span>
                                                 </div>
                                                 <div className="text-sm text-gray-600 ml-4">
                                                     {selection.addOns.map(addOnKey => (
@@ -667,6 +716,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                             <div className="flex justify-between text-green-600">
                                                 <span>Group Discount</span>
                                                 <span>-{formatPrice(priceBreakdown.groupDiscount)}</span>
+                                            </div>
+                                        )}
+                                        {priceBreakdown.childrenDiscount > 0 && (
+                                            <div className="flex justify-between text-green-600">
+                                                <span>Children Discount (50% off)</span>
+                                                <span>-{formatPrice(priceBreakdown.childrenDiscount)}</span>
                                             </div>
                                         )}
 
