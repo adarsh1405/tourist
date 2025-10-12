@@ -111,6 +111,21 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             googleMapsLink: 'https://maps.google.com/?q=Chilika+Lake+Odisha'
         },
         {
+            id: 'bhubaneshwar',
+            name: 'Bhubaneshwar City',
+            images: [
+                '/images/destinations/dhauli.jpg',
+                '/images/destinations/khandagiri.jpg',
+                '/images/destinations/lingaraj.jpg',
+                '/images/destinations/nandankanan.jpg'
+            ],
+            description: 'Capital city known for its temples, vibrant markets, and rich cultural heritage.',
+            highlights: ['Temples', 'Cultural Heritage', 'Vibrant Markets', 'Historical Sites'],
+            rating: 4.5,
+            reviews: 1345,
+            googleMapsLink: 'https://maps.google.com/?q=Bhubaneshwar+Odisha'
+        },
+        {
             id: 'raghurajpur',
             name: 'Raghurajpur Village',
             images: [
