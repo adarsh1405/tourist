@@ -54,10 +54,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'jagannath-temple',
             name: 'Jagannath Temple',
             images: [
-                '/images/jagannath-temple-1.jpg',
-                '/images/jagannath-temple-2.jpg',
-                '/images/jagannath-temple-3.jpg',
-                '/images/jagannath-rath-yatra.jpg'
+                '/images/destinations/jagannath-temple-1.jpg',
+                '/images/destinations/jagannath-temple-2.jpg',
+                '/images/destinations/jagannath-temple-3.jpg',
+                '/images/destinations/jagannath-rath-yatra.jpg'
             ],
             description: 'One of the four sacred Dhams in Hinduism, famous for its annual Rath Yatra festival.',
             highlights: ['Sacred Dham', 'Rath Yatra', 'Ancient Architecture', 'Spiritual Experience'],
@@ -69,10 +69,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'puri-beach',
             name: 'Puri Beach',
             images: [
-                '/images/puri-beach-sunrise.jpg',
-                '/images/puri-beach-activities.jpg',
-                '/images/puri-beach-fishing.jpg',
-                '/images/puri-beach-sunset.jpg'
+                '/images/destinations/puri-beach-sunrise.jpg',
+                '/images/destinations/puri-beach-activities.jpg',
+                '/images/destinations/puri-beach-fishing.jpg',
+                '/images/destinations/puri-beach-sunset.jpg'
             ],
             description: 'Golden sandy beach perfect for sunrise views, beach activities, and local seafood.',
             highlights: ['Golden Sand', 'Sunrise Views', 'Beach Sports', 'Fresh Seafood'],
@@ -84,10 +84,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'konark-sun-temple',
             name: 'Konark Sun Temple',
             images: [
-                '/images/konark-temple-front.jpg',
-                '/images/konark-temple-wheels.jpg',
-                '/images/konark-temple-sculptures.jpg',
-                '/images/konark-temple-sunset.jpg'
+                '/images/destinations/konark-temple-front.jpg',
+                '/images/destinations/konark-temple-wheels.jpg',
+                '/images/destinations/konark-temple-sculptures.jpg',
+                '/images/destinations/konark-temple-sunset.jpg'
             ],
             description: 'UNESCO World Heritage Site, magnificent 13th-century temple dedicated to the Sun God.',
             highlights: ['UNESCO Site', 'Ancient Marvel', 'Intricate Carvings', 'Historical Significance'],
@@ -99,10 +99,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'chilika-lake',
             name: 'Chilika Lake',
             images: [
-                '/images/chilika-lake-dolphins.jpg',
-                '/images/chilika-lake-birds.jpg',
-                '/images/chilika-lake-boat.jpg',
-                '/images/chilika-lake-sunset.jpg'
+                '/images/destinations/chilika-lake-dolphins.jpg',
+                '/images/destinations/chilika-lake-birds.jpg',
+                '/images/destinations/chilika-lake-boat.jpg',
+                '/images/destinations/chilika-lake-sunset.jpg'
             ],
             description: 'Asia\'s largest brackish water lagoon, famous for migratory birds and Irrawaddy dolphins.',
             highlights: ['Migratory Birds', 'Dolphin Spotting', 'Boat Rides', 'Natural Beauty'],
@@ -114,10 +114,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'raghurajpur',
             name: 'Raghurajpur Village',
             images: [
-                '/images/raghurajpur-pattachitra.jpg',
-                '/images/raghurajpur-artists.jpg',
-                '/images/raghurajpur-village.jpg',
-                '/images/raghurajpur-crafts.jpg'
+                '/images/destinations/raghurajpur-pattachitra.jpg',
+                '/images/destinations/raghurajpur-artists.jpg',
+                '/images/destinations/raghurajpur-village.jpg',
+                '/images/destinations/raghurajpur-crafts.jpg'
             ],
             description: 'Heritage crafts village known for Pattachitra paintings and traditional art forms.',
             highlights: ['Pattachitra Art', 'Traditional Crafts', 'Cultural Heritage', 'Artist Village'],
@@ -129,10 +129,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'pipili',
             name: 'Pipili',
             images: [
-                '/images/pipili-applique.jpg',
-                '/images/pipili-craftsmen.jpg',
-                '/images/pipili-market.jpg',
-                '/images/pipili-handicrafts.jpg'
+                '/images/destinations/pipili-applique.jpg',
+                '/images/destinations/pipili-craftsmen.jpg',
+                '/images/destinations/pipili-market.jpg',
+                '/images/destinations/pipili-handicrafts.jpg'
             ],
             description: 'Famous for colorful appliqué work and traditional Odishan handicrafts.',
             highlights: ['Appliqué Work', 'Handicrafts', 'Traditional Art', 'Shopping'],
