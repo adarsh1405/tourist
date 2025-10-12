@@ -14,7 +14,6 @@ import {
     ChevronLeft,
     ChevronRight,
     Calendar,
-    Camera,
     Car
 } from 'lucide-react';
 
@@ -369,8 +368,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                                                     backgroundPosition: 'center'
                                                 }}
                                             >
-                                                {/* Fallback camera icon if image doesn't load */}
-                                                <Camera className="h-16 w-16 text-gray-400 opacity-50" />
+                                                
                                             </div>
 
                                             {/* Image Navigation */}
