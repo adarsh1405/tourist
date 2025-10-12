@@ -149,7 +149,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                 '/images/destinations/pipili-handicrafts.jpg'
             ],
             description: 'Famous for colorful appliqué work and traditional Odishan handicrafts.',
-            highlights: ['Appliqué Work', 'Handicrafts', 'Traditional Art', 'Shopping'],
+            highlights: ['Appliqué Work','Traditional Art', 'Cultural Heritage','Handicrafts','Shopping'],
             rating: 4.4,
             reviews: 567,
             googleMapsLink: 'https://maps.google.com/?q=Pipili+Puri+Odisha'
@@ -331,14 +331,14 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                             <Button
                                 variant="outline"
                                 onClick={scrollLeft}
-                                className="p-3 rounded-full shadow-md hover:shadow-lg"
+                                className="p-3 rounded-full shadow-md hover:shadow-lg text-black hover-alt-text"
                             >
                                 <ChevronLeft className="h-6 w-6" />
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={scrollRight}
-                                className="p-3 rounded-full shadow-md hover:shadow-lg"
+                                className="p-3 rounded-full shadow-md hover:shadow-lg text-black hover-alt-text"
                             >
                                 <ChevronRight className="h-6 w-6" />
                             </Button>
@@ -555,14 +555,14 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                             <Button
                                 variant="outline"
                                 onClick={scrollReviewsLeft}
-                                className="p-3 rounded-full shadow-md hover:shadow-lg"
+                                className="p-3 rounded-full shadow-md hover:shadow-lg text-black hover-alt-text"
                             >
                                 <ChevronLeft className="h-6 w-6" />
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={scrollReviewsRight}
-                                className="p-3 rounded-full shadow-md hover:shadow-lg"
+                                className="p-3 rounded-full shadow-md hover:shadow-lg text-black hover-alt-text"
                             >
                                 <ChevronRight className="h-6 w-6" />
                             </Button>
