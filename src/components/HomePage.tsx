@@ -219,20 +219,20 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
         return currentImageIndex[destinationId] || 0;
     };
 
-    // Auto-scroll for destinations
+    // Auto-scroll for destinations (changed from 5s to 10s)
     useEffect(() => {
         const destinationInterval = setInterval(() => {
             setCurrentDestinationIndex(prev => (prev + 1) % popularDestinations.length);
-        }, 5000);
+        }, 10000);
 
         return () => clearInterval(destinationInterval);
     }, [popularDestinations.length]);
 
-    // Auto-scroll for reviews
+    // Auto-scroll for reviews (changed from 5s to 10s)
     useEffect(() => {
         const reviewInterval = setInterval(() => {
             setCurrentReviewIndex(prev => (prev + 1) % customerReviews.length);
-        }, 5000);
+        }, 10000);
 
         return () => clearInterval(reviewInterval);
     }, [customerReviews.length]);

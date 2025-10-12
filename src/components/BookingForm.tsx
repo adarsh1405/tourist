@@ -750,9 +750,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                             ) : (
                                 <div className="text-center py-8">
                                     <p className="text-gray-500">
-                                        {selection.selectedPackages.length === 0
-                                            ? 'Select at least one package to see pricing'
-                                            : 'Select your travel date to see pricing'
+                                        {!selection.startDate
+                                            ? 'Select your travel date to see pricing'
+                                            : selection.selectedPackages.length === 0
+                                                ? 'Select at least one package to see pricing'
+                                                : ''
                                         }
                                     </p>
                                 </div>
