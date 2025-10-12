@@ -204,3 +204,62 @@ html {
 .tour-package-card:hover .flip-card {
   transform: rotateY(180deg);
 }
+
+/* Responsive utilities */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile-friendly touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 640px) {
+
+  /* Better spacing for mobile */
+  .mobile-spacing {
+    padding: 0.75rem;
+  }
+
+  /* Full width buttons on mobile */
+  .mobile-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  /* Smaller card padding on mobile */
+  .card-content {
+    padding: 0.75rem;
+  }
+
+  /* Stack flex items on mobile */
+  .mobile-stack {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-spacing {
+    padding: 1rem;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .desktop-spacing {
+    padding: 1.5rem;
+  }
+}

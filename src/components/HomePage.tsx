@@ -436,29 +436,29 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center px-6">
+            <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
                 <div className="text-center max-w-4xl mx-auto z-10">
-                    <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 sm:mb-6">
                         Discover
                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-500">
                             Puri, Odisha
                         </span>
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+                    <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-6 sm:mb-8 leading-relaxed px-2">
                         Experience the spiritual heart of India with our premium tour packages.
                         From sacred temples to pristine beaches, create memories that last a lifetime.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button
                             onClick={onStartBooking}
-                            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transform transition hover:scale-105"
+                            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 sm:px-8 py-3 sm:py-4 text-lg font-semibold rounded-lg shadow-lg transform transition hover:scale-105"
                         >
                             <Calendar className="h-5 w-5 mr-2" />
                             Plan Your Journey
                         </Button>
                         <Button
                             variant="outline"
-                            className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-lg"
+                            className="w-full sm:w-auto border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 sm:px-8 py-3 sm:py-4 text-lg font-semibold rounded-lg"
                             onClick={() => document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' })}
                         >
                             <MapPin className="h-5 w-5 mr-2" />
@@ -469,15 +469,16 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             </section>
 
             {/* Popular Destinations Section */}
-            <section id="destinations" className="py-20 px-6 bg-white/80 backdrop-blur-sm relative">
+            <section id="destinations" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm relative">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-4xl font-bold text-gray-900 mb-4">Popular Destinations</h2>
-                        <p className="text-xl text-gray-600">Discover the most enchanting places in and around Puri</p>
+                    <div className="text-center mb-8 sm:mb-12">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">Popular Destinations</h2>
+                        <p className="text-lg sm:text-xl text-gray-600">Discover the most enchanting places in and around Puri</p>
                     </div>
 
                     <div className="relative">
-                        <div className="flex items-center justify-between mb-6">
+                        {/* Navigation buttons - hidden on mobile, shown on larger screens */}
+                        <div className="hidden md:flex items-center justify-between mb-6">
                             <Button
                                 variant="outline"
                                 onClick={scrollLeft}
@@ -496,17 +497,17 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
 
                         <div
                             ref={scrollContainerRef}
-                            className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide"
+                            className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 scrollbar-hide"
                             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                         >
                             {popularDestinations.map((destination) => (
                                 <div
                                     key={destination.id}
-                                    className="flex-none w-96 relative"
+                                    className="flex-none w-80 sm:w-96 relative"
                                 >
                                     <Card className="h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                                         {/* Image Carousel Section */}
-                                        <div className="h-48 relative overflow-hidden">
+                                        <div className="h-40 sm:h-48 relative overflow-hidden">
                                             {/* Current Image */}
                                             <div
                                                 className="h-full bg-gradient-to-br from-blue-200 to-orange-200 flex items-center justify-center transition-all duration-500"
@@ -649,15 +650,16 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             </section>
 
             {/* Tour Packages Section */}
-            <section className="py-20 px-6 bg-white">
+            <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-4xl font-bold text-gray-900 mb-4">Tour Packages</h2>
-                        <p className="text-xl text-gray-600">Choose from our carefully crafted tour packages</p>
+                    <div className="text-center mb-8 sm:mb-12">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">Tour Packages</h2>
+                        <p className="text-lg sm:text-xl text-gray-600">Choose from our carefully crafted tour packages</p>
                     </div>
 
                     <div className="relative">
-                        <div className="flex items-center justify-between mb-6">
+                        {/* Navigation buttons - hidden on mobile */}
+                        <div className="hidden md:flex items-center justify-between mb-6">
                             <Button
                                 variant="outline"
                                 onClick={() => {
@@ -686,17 +688,17 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
 
                         <div
                             id="packages-container"
-                            className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide"
+                            className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 scrollbar-hide"
                             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                         >
                             {tourPackages.map((pkg: TourPackage) => (
-                                <div key={pkg.id} className="flex-none w-[420px] relative h-[480px] perspective-1000">
+                                <div key={pkg.id} className="flex-none w-80 sm:w-[420px] relative h-[400px] sm:h-[480px] perspective-1000">
                                     <div className="flip-card w-full h-full relative transform-style-preserve-3d transition-transform duration-700 hover:rotate-y-180">
                                         {/* Front of Card */}
                                         <div className="flip-card-front absolute w-full h-full backface-hidden">
                                             <Card className="h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                                                 <div
-                                                    className="h-56 bg-gradient-to-br from-blue-200 to-orange-200 flex items-center justify-center relative"
+                                                    className="h-44 sm:h-56 bg-gradient-to-br from-blue-200 to-orange-200 flex items-center justify-center relative"
                                                     style={{
                                                         backgroundImage: pkg.image ? `url(${pkg.image})` : undefined,
                                                         backgroundSize: 'cover',
@@ -830,15 +832,16 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             </section>
 
             {/* Customer Reviews */}
-            <section className="py-20 px-6 bg-white">
+            <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white">
                 <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
-                        <p className="text-xl text-gray-600">Real experiences from real travelers</p>
+                    <div className="text-center mb-8 sm:mb-12">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">What Our Customers Say</h2>
+                        <p className="text-lg sm:text-xl text-gray-600">Real experiences from real travelers</p>
                     </div>
 
                     <div className="relative">
-                        <div className="flex items-center justify-between mb-6">
+                        {/* Navigation buttons - hidden on mobile */}
+                        <div className="hidden md:flex items-center justify-between mb-6">
                             <Button
                                 variant="outline"
                                 onClick={scrollReviewsLeft}
@@ -857,19 +860,19 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
 
                         <div
                             ref={reviewsScrollContainerRef}
-                            className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide"
+                            className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 scrollbar-hide"
                             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                         >
                             {customerReviews.map((review) => (
-                                <div key={review.id} className="flex-none w-80">
-                                    <Card className="p-6 hover:shadow-lg transition-shadow h-full">
+                                <div key={review.id} className="flex-none w-72 sm:w-80">
+                                    <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow h-full">
                                         <div className="flex items-center mb-4">
-                                            <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold mr-3">
+                                            <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full w-10 sm:w-12 h-10 sm:h-12 flex items-center justify-center text-white font-bold mr-3">
                                                 {review.name.charAt(0)}
                                             </div>
                                             <div>
-                                                <h4 className="font-semibold">{review.name}</h4>
-                                                <p className="text-sm text-gray-500">{review.location}</p>
+                                                <h4 className="font-semibold text-sm sm:text-base">{review.name}</h4>
+                                                <p className="text-xs sm:text-sm text-gray-500">{review.location}</p>
                                             </div>
                                         </div>
 
@@ -930,15 +933,15 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
 
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-white py-12 px-6">
+            <footer className="bg-gray-900 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div>
-                            <h3 className="text-2xl font-bold mb-4">Puri Tours</h3>
-                            <p className="text-gray-300 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                        <div className="sm:col-span-2 lg:col-span-1">
+                            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Puri Tours</h3>
+                            <p className="text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">
                                 Your trusted partner for exploring the spiritual and cultural heritage of Puri, Odisha.
                             </p>
-                            <div className="flex space-x-4">
+                            <div className="flex space-x-3 sm:space-x-4">
                                 <div className="bg-blue-600 rounded-full p-2">
                                     <Phone className="h-4 w-4" />
                                 </div>
@@ -952,27 +955,27 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                         </div>
 
                         <div>
-                            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-                            <ul className="space-y-2 text-gray-300">
-                                <li><a href="#destinations" className="hover:text-white">Destinations</a></li>
-                                <li><a href="#" className="hover:text-white">Tour Packages</a></li>
-                                <li><a href="#" className="hover:text-white">About Us</a></li>
-                                <li><a href="#" className="hover:text-white">Contact</a></li>
+                            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Links</h4>
+                            <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
+                                <li><a href="#destinations" className="hover:text-white transition-colors">Destinations</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">Tour Packages</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
                             </ul>
                         </div>
 
                         <div>
-                            <h4 className="text-lg font-semibold mb-4">Legal</h4>
-                            <ul className="space-y-2 text-gray-300">
-                                <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                                <li><a href="#" className="hover:text-white">Cancellation Policy</a></li>
-                                <li><a href="#" className="hover:text-white">Travel Insurance</a></li>
+                            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Legal</h4>
+                            <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
+                                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">Cancellation Policy</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">Travel Insurance</a></li>
                             </ul>
                         </div>
                     </div>
 
-                    <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                        <p>&copy; 2024 Puri Tours. All rights reserved. | Licensed Tour Operator</p>
+                    <div className="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400">
+                        <p className="text-xs sm:text-sm">&copy; 2024 Puri Tours. All rights reserved. | Licensed Tour Operator</p>
                     </div>
                 </div>
             </footer>

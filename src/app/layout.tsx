@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Puri Tours - Discover the Beauty of Puri, Odisha",
   description: "Experience the best of Puri with our customizable tour packages. Visit Jagannath Temple, Puri Beach, Konark Sun Temple, and more.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({

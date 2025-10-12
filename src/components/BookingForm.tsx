@@ -218,8 +218,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto p-6 space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
                 <Button
                     variant="outline"
                     onClick={onBackToHome}
@@ -228,14 +228,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                     <ArrowLeft className="h-4 w-4" />
                     Back to Home
                 </Button>
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-900">Customize Your Journey</h1>
-                    <p className="text-xl text-gray-600">Select your preferred packages and options</p>
+                <div className="text-center flex-1 sm:flex-none">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">Customize Your Journey</h1>
+                    <p className="text-lg sm:text-xl text-gray-600">Select your preferred packages and options</p>
                 </div>
-                <div></div> {/* Spacer for flex layout */}
+                <div className="hidden sm:block"></div> {/* Spacer for flex layout - only on larger screens */}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 {/* Booking Form */}
                 <div className="space-y-6">
                     {/* Travel Details */}
@@ -251,7 +251,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.travelDetails && (
-                                        <span className="text-sm text-gray-600 font-normal">
+                                        <span className="hidden sm:inline text-sm text-gray-600 font-normal">
                                             {getCardSummary('travelDetails')}
                                         </span>
                                     )}
@@ -265,7 +265,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                         </CardHeader>
                         {expandedCards.travelDetails && (
                             <CardContent className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-2">Start Date</label>
                                         <input
@@ -297,7 +297,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                                             <User className="h-4 w-4" />
@@ -374,7 +374,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.packages && (
-                                        <span className="text-sm text-gray-600 font-normal">
+                                        <span className="hidden sm:inline text-sm text-gray-600 font-normal">
                                             {getCardSummary('packages')}
                                         </span>
                                     )}
@@ -485,7 +485,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.accommodation && (
-                                        <span className="text-sm text-gray-600 font-normal">
+                                        <span className="hidden sm:inline text-sm text-gray-600 font-normal">
                                             {getCardSummary('accommodation')}
                                         </span>
                                     )}
@@ -556,7 +556,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
 
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.addOns && (
-                                        <span className="text-sm text-gray-600 font-normal">
+                                        <span className="hidden sm:inline text-sm text-gray-600 font-normal">
                                             {getCardSummary('addOns')}
                                         </span>
                                     )}
@@ -628,16 +628,17 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                 <div className="lg:sticky lg:top-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Price Summary</CardTitle>
+                            <CardTitle className="text-lg sm:text-xl">Price Summary</CardTitle>
                             <CardDescription>Your customized package details</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {priceBreakdown && selection.selectedPackages.length > 0 ? (
                                 <div className="space-y-4">
-                                    <div className="space-y-2">                        <div className="flex justify-between">
-                                        <span>Selected Packages ({selection.numberOfPeople} adults{selection.numberOfChildren > 0 ? `, ${selection.numberOfChildren} children` : ''})</span>
-                                        <span>{formatPrice(priceBreakdown.basePackagePrice)}</span>
-                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-start">
+                                            <span className="text-sm sm:text-base">Selected Packages ({selection.numberOfPeople} adults{selection.numberOfChildren > 0 ? `, ${selection.numberOfChildren} children` : ''})</span>
+                                            <span className="font-medium text-sm sm:text-base">{formatPrice(priceBreakdown.basePackagePrice)}</span>
+                                        </div>
                                         {selection.numberOfChildren > 0 && (
                                             <div className="text-sm text-green-600 ml-4">
                                                 • Children discount applied: 50% off packages & meals
@@ -655,9 +656,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                                 {totalNights > 0 && `, ${totalNights} night${totalNights > 1 ? 's' : ''}`}
                                             </div>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span>Accommodation {selection.accommodation !== 'none' ? 'Upgrade' : ''}</span>
-                                            <span>{priceBreakdown.accommodationPrice > 0 ? formatPrice(priceBreakdown.accommodationPrice) : 'Not Selected'}</span>
+                                        <div className="flex justify-between items-start">
+                                            <span className="text-sm sm:text-base">Accommodation {selection.accommodation !== 'none' ? 'Upgrade' : ''}</span>
+                                            <span className="font-medium text-sm sm:text-base">{priceBreakdown.accommodationPrice > 0 ? formatPrice(priceBreakdown.accommodationPrice) : 'Not Selected'}</span>
                                         </div>
                                         {priceBreakdown.accommodationPrice > 0 && (
                                             <div className="text-sm text-gray-600 ml-4">
@@ -794,11 +795,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                         </div>
                                     </div>
 
-                                    <Button className="w-full" size="lg">
+                                    <Button className="w-full py-3 sm:py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transform hover:scale-[1.02] transition-all duration-200" size="lg">
                                         Book Now
                                     </Button>
 
-                                    <p className="text-xs text-gray-500 text-center">
+                                    <p className="text-xs sm:text-sm text-gray-500 text-center px-2">
                                         Final price may vary based on availability and special offers
                                     </p>
                                 </div>
