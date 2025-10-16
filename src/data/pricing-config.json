@@ -4,43 +4,48 @@
             "name": "Puri, Odisha",
             "description": "Explore the spiritual and cultural heritage of Puri",
             "availablePackages": {
-                "puri-day-tour": {
-                    "name": "Puri Day Tour",
+                "puri-night-stay": {
+                    "name": "Puri Night stay with Temple Visit",
                     "description": "Visit Jagannath Temple and Puri Beach",
-                    "basePricePerPerson": 1500,
-                    "duration": 1,
+                    "basePricePerPerson": 2500,
+                    "duration": 2,
                     "inclusions": [
                         "Jagannath Temple visit",
+                        "1 night accommodation",
                         "Puri Beach",
-                        "Local guide",
+                        "Local sightseeing",
                         "Transportation",
                         "Entry fees"
+                        
                     ]
                 },
                 "chilika-tour": {
                     "name": "Chilika Lake Tour",
                     "description": "Asia's largest brackish water lagoon",
-                    "basePricePerPerson": 2000,
-                    "duration": 1,
+                    "basePricePerPerson": 3500,
+                    "duration": 2,
                     "inclusions": [
-                        "Chilika Lake boat ride",
+                        "3hrs Chilika Lake boat ride",
                         "Dolphin watching",
                         "Bird sanctuary visit",
                         "Transportation",
-                        "Local guide"
+                        "Local sightseeing"
                     ]
                 },
                 "konark-tour": {
                     "name": "Konark Sun Temple Tour",
                     "description": "UNESCO World Heritage Site",
-                    "basePricePerPerson": 1800,
-                    "duration": 1,
+                    "basePricePerPerson": 2750,
+                    "duration": 2,
                     "inclusions": [
                         "Konark Sun Temple",
                         "Chandrabhaga Beach",
+                        "Ramchandi Temple",
+                        "Beleswar Secret Beach",
                         "Archaeological museum",
                         "Transportation",
-                        "Entry fees"
+                        "Laser light show",
+                        "Parking fees"
                     ]
                 },
                 "bhubaneswar-tour": {
@@ -50,10 +55,10 @@
                     "duration": 1,
                     "inclusions": [
                         "Lingaraj Temple",
-                        "Mukteshwar Temple",
-                        "Rajarani Temple",
+                        "Dhauli Peace Pagoda",
                         "Udayagiri Caves",
-                        "Transportation"
+                        "Transportation",
+                        "Nandankanan Zoological Park"
                     ]
                 },
                 "golden-triangle": {
@@ -73,27 +78,66 @@
             },
             "accommodationOptions": {
                 "none": {
-                    "name": "No Accommodation",
+                    "name": "Upgrade",
                     "pricePerNight": 0,
-                    "description": "Day tours only - no overnight stay"
+                    "description": "your stays",
+                    "category": "none",
+                    "amenities": []
                 },
-                "budget": {
-                    "name": "Budget Hotels",
-                    "pricePerNight": 800,
-                    "description": "Clean and comfortable budget accommodations",
-                    "extraCostPerPerson": 0
+                "deluxe-premium": {
+                    "name": "Deluxe Premium",
+                    "category": "deluxe",
+                    "pricePerNight": 2000,
+                    "description": "Enhanced deluxe rooms with additional comfort",
+                    "extraCostPerPerson": 1000,
+                    "amenities": [
+                        "Spacious rooms",
+                        "Free WiFi",
+                        "Room Service",
+                        "Daily Housekeeping"
+                    ]
                 },
-                "standard": {
-                    "name": "Standard Hotels",
-                    "pricePerNight": 1500,
-                    "description": "Well-appointed rooms with modern amenities",
-                    "extraCostPerPerson": 300
+                "superior-sea": {
+                    "name": "Superior Sea View",
+                    "category": "superior",
+                    "pricePerNight": 3200,
+                    "description": "Premium rooms with stunning ocean views",
+                    "extraCostPerPerson": 1600,
+                    "amenities": [
+                        "Air Conditioning",
+                        "Free WiFi",
+                        "Complimentary Breakfast & Dinner",
+                        "24/7 Room Service",
+                        "Daily Housekeeping",
+                        "Mini Refrigerator",
+                        "Tea/Coffee Maker",
+                        "Sea View Balcony",
+                        "Premium Toiletries",
+                        "Bathrobes & Slippers"
+                    ]
                 },
-                "luxury": {
-                    "name": "Luxury Hotels",
-                    "pricePerNight": 3500,
-                    "description": "Premium hotels with sea view and luxury amenities",
-                    "extraCostPerPerson": 800
+                "luxury-presidential": {
+                    "name": "Presidential Suite",
+                    "category": "luxury",
+                    "pricePerNight": 8000,
+                    "description": "Ultimate luxury with exclusive amenities",
+                    "extraCostPerPerson": 4000,
+                    "amenities": [
+                        "Air Conditioning",
+                        "Free WiFi",
+                        "All Meals Included",
+                        "24/7 Butler Service",
+                        "Daily Housekeeping",
+                        "Fully Stocked Mini Bar",
+                        "Espresso Machine",
+                        "Private Terrace",
+                        "Premium Toiletries",
+                        "Bathrobes & Slippers",
+                        "Separate Living & Dining Area",
+                        "Private Jacuzzi",
+                        "Complimentary Spa Access",
+                        "Airport Transfer"
+                    ]
                 }
             },
             "mealOptions": {

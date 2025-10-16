@@ -11,6 +11,8 @@ export interface AccommodationOption {
     pricePerNight: number;
     description: string;
     extraCostPerPerson?: number;
+    category?: string;
+    amenities?: string[];
 }
 
 export interface MealOption {

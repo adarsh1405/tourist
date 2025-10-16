@@ -24,7 +24,7 @@ export class PricingCalculator {
             if (pkg) {
                 totalDays = pkg.duration;
                 // Children under 11 get 50% discount on package price
-                const adultPrice = pkg.basePricePerPerson * (selection.numberOfPeople - selection.numberOfChildren);
+                const adultPrice = pkg.basePricePerPerson * (selection.numberOfPeople);
                 const childPrice = pkg.basePricePerPerson * selection.numberOfChildren * 0.5;
                 basePackagePrice = adultPrice + childPrice;
             }
@@ -35,7 +35,7 @@ export class PricingCalculator {
                 if (pkg) {
                     totalDays += pkg.duration;
                     // Children under 11 get 50% discount on package price
-                    const adultPrice = pkg.basePricePerPerson * (selection.numberOfPeople - selection.numberOfChildren);
+                    const adultPrice = pkg.basePricePerPerson * (selection.numberOfPeople);
                     const childPrice = pkg.basePricePerPerson * selection.numberOfChildren * 0.5;
                     basePackagePrice += adultPrice + childPrice;
                 }

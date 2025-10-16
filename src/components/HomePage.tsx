@@ -204,41 +204,63 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
 
     const tourPackages: TourPackage[] = [
         {
-            id: 'puri-day-tour',
-            name: 'Puri Day Tour',
-            description: 'Visit Jagannath Temple and Puri Beach in a single day',
-            price: 1500,
-            duration: 1,
+            id: 'golden-triangle',
+            name: 'Golden Triangle Package',
+            description: 'Complete 3-days of Puri , Konark , Bhubaneshwar circuit with accommodation',
+            price: 8950,
+            duration: 3,
             image: '/images/destinations/jagannath-temple-1.jpg',
             inclusions: [
-                'Jagannath Temple visit',
-                'Puri Beach exploration',
-                'Local guide services',
+                'All major temples visit',
+                'Puri , Konark , Bhubaneshwar sightseeing',
+                '2 nights accommodation in a standard room in Puri',
                 'AC transportation',
-                'Entry fees included',
-                'Refreshments'
+                'Parking fees covered',
+                'Surprise gifts for guests'
             ],
             exclusions: [
-                'Personal expenses',
-                'Meals (lunch/dinner)',
-                'Shopping costs',
-                'Tips for guide'
+                'Personal Expense',
+                'Entry fees',
+                'Travel insurance',
+                'Extra sightseeing'
+            ]
+        },
+        {
+            id: 'ultimate-package',
+            name: 'Ultimate Package',
+            description: 'Complete 4-day Odisha visit with Chilika Lake and Raghurajpur village',
+            price: 13500,
+            duration: 4,
+            image: '/images/destinations/jagannath-temple-3.jpg',
+            inclusions: [
+                'All major temples visit',
+                'Puri , Konark , Bhubaneshwar sightseeing',
+                '4 nights accommodation in a standard room in Puri',
+                'AC transportation',
+                'Parking fees covered',
+                'Surprise gifts for guests'
+            ],
+            exclusions: [
+                'Personal Expense',
+                'Entry fees',
+                'Travel insurance',
+                'Extra sightseeing'
             ]
         },
         {
             id: 'chilika-tour',
             name: 'Chilika Lake Tour',
             description: 'Experience Asia\'s largest brackish water lagoon with dolphin watching',
-            price: 2000,
-            duration: 1,
+            price: 4000,
+            duration: 2,
             image: '/images/destinations/chilika-lake-dolphins.jpg',
             inclusions: [
-                'Chilika Lake boat ride',
-                'Dolphin watching experience',
-                'Bird sanctuary visit',
+                'Chilika Lake boat ride (Dolphin,migratory birds watching)',
+                "1 Night Accommodation with standard room in puri",
                 'Professional guide',
                 'Transportation to/from lake',
-                'Life jackets provided'
+                'Life jackets provided',
+                'Parking fees'
             ],
             exclusions: [
                 'Personal expenses',
@@ -251,55 +273,54 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'konark-tour',
             name: 'Konark Sun Temple Tour',
             description: 'Explore the UNESCO World Heritage Site and architectural marvel',
-            price: 1800,
-            duration: 1,
+            price: 3500,
+            duration: 2,
             image: '/images/destinations/konark-temple-front.jpg',
             inclusions: [
-                'Konark Sun Temple visit',
-                'Chandrabhaga Beach time',
-                'Archaeological museum',
-                'Expert guide commentary',
-                'Transportation included',
-                'Entry tickets'
+                "Konark Sun Temple , Ramchandi Temple",
+                "Chandrabhaga Beach",
+                "Beleswar Secret Beach or Sand Art Museum",
+                "Archaeological museum",
+                "Transportation",
+                "Laser light show",
+                "Parking fees"
             ],
             exclusions: [
                 'Personal shopping',
                 'Meals and snacks',
                 'Photography fees',
-                'Additional activities'
+                'Sand Art Museum entry fees'
             ]
         },
         {
-            id: 'golden-triangle',
-            name: 'Golden Triangle Package',
-            description: 'Complete 3-day Odisha temple circuit with accommodation',
-            price: 4500,
-            duration: 3,
-            image: '/images/destinations/jagannath-temple-2.jpg',
+            id: 'puri-night-stay',
+            name: 'Puri Night Stay',
+            description: 'Enjoy a relaxing night stay in Puri with beach access with day sightseeing',
+            price: 3000,
+            duration: 2,
+            image: '/images/destinations/puri-beach-sunrise.jpg',
             inclusions: [
-                'All major temples visit',
-                'Konark Sun Temple',
-                'Puri Beach activities',
-                '2 nights accommodation',
-                'All meals included',
-                'AC transportation',
-                'Professional guide',
-                'Entry fees covered'
+                "1 Night Accommodation with standard room",
+                "Local sightseeing (Lighthouse, Laxmi's house, etc)",
+                "Local guide services",
+                "Jagannath Temple visit",
+                "Puri Beach exploration",
+                "Parking fees"
             ],
             exclusions: [
-                'Personal laundry',
-                'Telephone expenses',
-                'Alcoholic beverages',
-                'Travel insurance',
-                'Extra sightseeing'
+                "Personal expenses",
+                "Meals (lunch/dinner)",
+                "Shopping costs",
+                "Tips for guide"
             ]
         },
+
         {
             id: 'cultural-heritage',
             name: 'Cultural Heritage Tour',
             description: 'Explore traditional art villages and handicraft centers',
-            price: 2200,
-            duration: 1,
+            price: 3250,
+            duration: 2,
             image: '/images/destinations/raghurajpur-pattachitra.jpg',
             inclusions: [
                 'Raghurajpur village visit',
@@ -320,7 +341,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
             id: 'spiritual-journey',
             name: 'Spiritual Journey',
             description: 'Experience the spiritual essence of Odisha temples',
-            price: 3200,
+            price: 4100,
             duration: 2,
             image: '/images/destinations/lingaraj.jpg',
             inclusions: [
@@ -436,7 +457,167 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+            <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+                {/* Cultural Background Illustrations */}
+                <div className="absolute inset-0 pointer-events-none">
+                    {/* Konark Sun Temple Wheel - Top Right */}
+                    <div className="absolute top-10 right-10 opacity-10">
+                        <svg width="200" height="200" viewBox="0 0 200 200" className="text-orange-400">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="2" />
+                            <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" strokeWidth="1" />
+                            <circle cx="100" cy="100" r="50" fill="none" stroke="currentColor" strokeWidth="1" />
+                            {/* Spokes */}
+                            {Array.from({ length: 8 }).map((_, i) => (
+                                <line
+                                    key={i}
+                                    x1="100"
+                                    y1="10"
+                                    x2="100"
+                                    y2="190"
+                                    stroke="currentColor"
+                                    strokeWidth="1"
+                                    transform={`rotate(${i * 45} 100 100)`}
+                                />
+                            ))}
+                            {/* Decorative elements */}
+                            {Array.from({ length: 16 }).map((_, i) => (
+                                <circle
+                                    key={i}
+                                    cx="100"
+                                    cy="30"
+                                    r="3"
+                                    fill="currentColor"
+                                    transform={`rotate(${i * 22.5} 100 100)`}
+                                />
+                            ))}
+                        </svg>
+                    </div>
+
+                    {/* Temple Silhouette - Left Side */}
+                    <div className="absolute left-5 top-20 opacity-8">
+                        <svg width="150" height="180" viewBox="0 0 150 180" className="text-blue-400">
+                            {/* Main temple structure */}
+                            <rect x="50" y="100" width="50" height="80" fill="currentColor" />
+                            {/* Temple top */}
+                            <polygon points="75,60 45,100 105,100" fill="currentColor" />
+                            {/* Smaller spires */}
+                            <polygon points="30,80 20,100 40,100" fill="currentColor" />
+                            <polygon points="120,80 110,100 130,100" fill="currentColor" />
+                            {/* Flag */}
+                            <line x1="75" y1="60" x2="75" y2="40" stroke="currentColor" strokeWidth="2" />
+                            <rect x="75" y="40" width="15" height="8" fill="currentColor" />
+                            {/* Steps */}
+                            <rect x="40" y="170" width="70" height="5" fill="currentColor" />
+                            <rect x="45" y="165" width="60" height="5" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    {/* Ocean Waves - Bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 opacity-6">
+                        <svg width="100%" height="100" viewBox="0 0 1200 100" className="text-blue-300">
+                            <path
+                                d="M0,50 Q300,20 600,50 T1200,50 V100 H0 Z"
+                                fill="currentColor"
+                            />
+                            <path
+                                d="M0,60 Q200,30 400,60 T800,60 T1200,60 V100 H0 Z"
+                                fill="currentColor"
+                                opacity="0.7"
+                            />
+                        </svg>
+                    </div>
+
+                    {/* Traditional Patterns - Scattered */}
+                    <div className="absolute top-32 left-1/4 opacity-5">
+                        <svg width="80" height="80" viewBox="0 0 80 80" className="text-orange-300">
+                            {/* Pattachitra style flower */}
+                            <circle cx="40" cy="40" r="35" fill="none" stroke="currentColor" strokeWidth="2" />
+                            {Array.from({ length: 8 }).map((_, i) => (
+                                <ellipse
+                                    key={i}
+                                    cx="40"
+                                    cy="15"
+                                    rx="8"
+                                    ry="15"
+                                    fill="currentColor"
+                                    transform={`rotate(${i * 45} 40 40)`}
+                                />
+                            ))}
+                            <circle cx="40" cy="40" r="8" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    <div className="absolute bottom-32 right-1/4 opacity-5">
+                        <svg width="60" height="60" viewBox="0 0 60 60" className="text-blue-300">
+                            {/* Traditional motif */}
+                            <rect x="10" y="10" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2" />
+                            <circle cx="30" cy="30" r="15" fill="none" stroke="currentColor" strokeWidth="1" />
+                            <path d="M15,30 Q30,15 45,30 Q30,45 15,30" fill="currentColor" opacity="0.3" />
+                        </svg>
+                    </div>
+
+                    {/* Flying Birds */}
+                    <div className="absolute top-40 right-1/3 opacity-8">
+                        <svg width="100" height="60" viewBox="0 0 100 60" className="text-gray-400">
+                            {Array.from({ length: 3 }).map((_, i) => (
+                                <g key={i} transform={`translate(${i * 25}, ${i * 8})`}>
+                                    <path d="M10,20 Q15,15 20,20 Q15,25 10,20" fill="currentColor" />
+                                    <path d="M20,20 Q25,15 30,20 Q25,25 20,20" fill="currentColor" />
+                                </g>
+                            ))}
+                        </svg>
+                    </div>
+
+                    {/* Lotus Pattern - Top Left */}
+                    <div className="absolute top-16 left-16 opacity-6">
+                        <svg width="120" height="120" viewBox="0 0 120 120" className="text-pink-300">
+                            <g transform="translate(60,60)">
+                                {Array.from({ length: 12 }).map((_, i) => (
+                                    <ellipse
+                                        key={i}
+                                        cx="0"
+                                        cy="-40"
+                                        rx="6"
+                                        ry="20"
+                                        fill="currentColor"
+                                        transform={`rotate(${i * 30})`}
+                                        opacity="0.7"
+                                    />
+                                ))}
+                                <circle cx="0" cy="0" r="12" fill="currentColor" />
+                            </g>
+                        </svg>
+                    </div>
+
+                    {/* Traditional Border Pattern - Right Edge */}
+                    <div className="absolute right-0 top-1/2 transform -translate-y-1/2 opacity-4">
+                        <svg width="50" height="300" viewBox="0 0 50 300" className="text-orange-200">
+                            {Array.from({ length: 10 }).map((_, i) => (
+                                <g key={i} transform={`translate(25, ${i * 30 + 15})`}>
+                                    <circle cx="0" cy="0" r="8" fill="currentColor" />
+                                    <circle cx="0" cy="0" r="15" fill="none" stroke="currentColor" strokeWidth="1" />
+                                </g>
+                            ))}
+                        </svg>
+                    </div>
+
+                    {/* Dancing Figure Silhouette */}
+                    <div className="absolute bottom-20 left-20 opacity-6">
+                        <svg width="80" height="100" viewBox="0 0 80 100" className="text-purple-300">
+                            {/* Simplified Odissi dancer silhouette */}
+                            <ellipse cx="40" cy="15" rx="8" ry="10" fill="currentColor" /> {/* Head */}
+                            <rect x="35" y="25" width="10" height="25" fill="currentColor" /> {/* Torso */}
+                            <ellipse cx="40" cy="60" rx="15" ry="8" fill="currentColor" /> {/* Hip */}
+                            {/* Arms */}
+                            <ellipse cx="25" cy="35" rx="12" ry="4" fill="currentColor" transform="rotate(-30 25 35)" />
+                            <ellipse cx="55" cy="35" rx="12" ry="4" fill="currentColor" transform="rotate(30 55 35)" />
+                            {/* Legs */}
+                            <ellipse cx="32" cy="85" rx="4" ry="15" fill="currentColor" />
+                            <ellipse cx="48" cy="85" rx="4" ry="15" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
+
                 <div className="text-center max-w-4xl mx-auto z-10">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 sm:mb-6">
                         Discover
@@ -705,6 +886,13 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                                                         backgroundPosition: 'center'
                                                     }}
                                                 >
+                                                    {/* Fallback content if image doesn't load */}
+                                                    {!pkg.image && (
+                                                        <div className="text-center text-white">
+                                                            <MapPin className="h-12 w-12 mx-auto mb-2" />
+                                                            <p className="text-sm font-medium">Tour Package</p>
+                                                        </div>
+                                                    )}
                                                     <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                                                     <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
                                                         <span className="text-sm font-semibold text-gray-900">{pkg.duration} Day{pkg.duration > 1 ? 's' : ''}</span>
@@ -782,6 +970,13 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* Terms & Conditions Note */}
+                    <div className="mt-5 text-center">
+                        <div className="max-w-2xl mx-auto text-xs text-gray-500 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-300">
+                            <strong className="text-gray-700">Terms & Conditions:</strong> All package prices are calculated for 2 adults sharing 1 single room or 2 adults with 1 child. Additional charges may apply for extra occupancy, room upgrades, or special requirements.
                         </div>
                     </div>
                 </div>

@@ -141,7 +141,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                 if (selection.accommodation === 'none') {
                     return 'No accommodation - Day tours only';
                 }
-                return `${acc.name}${acc.extraCostPerPerson ? ` (+${formatPrice(acc.extraCostPerPerson)}/person)` : ''} - ${formatPrice(acc.pricePerNight)}/night`;
+                return `${acc.name}${acc.extraCostPerPerson && acc.extraCostPerPerson > 0 ? ` (+${formatPrice(acc.extraCostPerPerson)}/person)` : ''} - ${formatPrice(acc.pricePerNight)}/night`;
             case 'addOns':
                 return selection.addOns.length > 0
                     ? `${selection.addOns.length} add-on${selection.addOns.length > 1 ? 's' : ''} selected`
@@ -212,6 +212,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
     };
 
     const { days: totalDays, nights: totalNights } = calculateTotalDuration();
+
+    // Check if accommodation is needed (only for multi-day tours with nights)
+    const isAccommodationNeeded = totalNights > 0;
+
+    // Auto-select "No Accommodation" when only day tours are selected
+    useEffect(() => {
+        if (!isAccommodationNeeded && selection.accommodation !== 'none') {
+            setSelection(prev => ({ ...prev, accommodation: 'none' }));
+        }
+    }, [isAccommodationNeeded, selection.accommodation]);
 
     const handleDateChange = (value: string) => {
         handleInputChange('startDate', value);
@@ -313,10 +323,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                         />
                                         <p className="text-xs text-gray-500 mt-1">50% discount on packages & meals</p>
                                     </div>
-                                    <div>
+                                    <div className={!isAccommodationNeeded ? 'opacity-50' : ''}>
                                         <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                                             <Bed className="h-4 w-4" />
                                             Number of Rooms
+                                            {!isAccommodationNeeded && (
+                                                <span className="text-xs text-yellow-600">(Not needed for day tours)</span>
+                                            )}
                                         </label>
                                         <input
                                             type="number"
@@ -324,14 +337,17 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                             max="20"
                                             value={selection.numberOfRooms}
                                             onChange={(e) => handleInputChange('numberOfRooms', parseInt(e.target.value) || 1)}
-                                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            disabled={!isAccommodationNeeded}
+                                            className={`w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!isAccommodationNeeded ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">Max 3 people per room</p>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {isAccommodationNeeded ? 'Max 3 people per room' : 'Room selection disabled for day tours'}
+                                        </p>
                                     </div>
                                 </div>
 
                                 {/* Room allocation display */}
-                                {(selection.numberOfPeople + selection.numberOfChildren > 0) && selection.numberOfRooms > 0 && (
+                                {(selection.numberOfPeople + selection.numberOfChildren > 0) && selection.numberOfRooms > 0 && isAccommodationNeeded && (
                                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
                                         <h4 className="text-sm font-medium text-blue-900 mb-2">Room Allocation:</h4>
                                         <div className="text-sm text-blue-800">
@@ -343,6 +359,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                                     ⚠️ Warning: You may need more rooms (max 3 people per room)
                                                 </div>
                                             )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Day tour info display */}
+                                {!isAccommodationNeeded && selection.selectedPackages.length > 0 && (
+                                    <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                                        <h4 className="text-sm font-medium text-green-900 mb-2">Day Tour Information:</h4>
+                                        <div className="text-sm text-green-800">
+                                            Total People: {selection.numberOfPeople + selection.numberOfChildren} ({selection.numberOfPeople} adults + {selection.numberOfChildren} children)
+                                            <br />
+                                            Duration: {totalDays} day{totalDays > 1 ? 's' : ''} • No overnight stay required
+                                            <br />
+                                            Transportation: Included in all day tours
                                         </div>
                                     </div>
                                 )}
@@ -473,15 +503,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                     </Card>
 
                     {/* Accommodation */}
-                    <Card>
+                    <Card className={!isAccommodationNeeded ? 'opacity-60' : ''}>
                         <CardHeader
-                            className="cursor-pointer hover:bg-gray-50 transition-colors"
-                            onClick={() => toggleCardExpansion('accommodation')}
+                            className={`cursor-pointer transition-colors ${!isAccommodationNeeded ? 'cursor-not-allowed' : 'hover:bg-gray-50'}`}
+                            onClick={() => isAccommodationNeeded && toggleCardExpansion('accommodation')}
                         >
                             <CardTitle className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Bed className="h-5 w-5" />
                                     Accommodation
+                                    {!isAccommodationNeeded && (
+                                        <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full ml-2">
+                                            Upgrade your stays
+                                        </span>
+                                    )}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.accommodation && (
@@ -489,52 +524,185 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                             {getCardSummary('accommodation')}
                                         </span>
                                     )}
-                                    {expandedCards.accommodation ? (
-                                        <ChevronUp className="h-4 w-4 text-gray-500" />
-                                    ) : (
-                                        <ChevronDown className="h-4 w-4 text-gray-500" />
+                                    {isAccommodationNeeded && (
+                                        expandedCards.accommodation ? (
+                                            <ChevronUp className="h-4 w-4 text-gray-500" />
+                                        ) : (
+                                            <ChevronDown className="h-4 w-4 text-gray-500" />
+                                        )
                                     )}
                                 </div>
                             </CardTitle>
                         </CardHeader>
-                        {expandedCards.accommodation && (
+                        {expandedCards.accommodation && isAccommodationNeeded && (
                             <CardContent>
-                                <div className="space-y-3">
-                                    {Object.entries(destination.accommodationOptions).map(([key, option]) => (
-                                        <div
-                                            key={key}
-                                            className={`p-3 border rounded-lg cursor-pointer transition-all ${selection.accommodation === key
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 hover:border-gray-300'
-                                                }`}
-                                            onClick={() => handleInputChange('accommodation', key)}
-                                        >
-                                            <div className="flex justify-between items-center">
-                                                <div className="flex-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <h4 className="font-medium">{option.name}</h4>
-                                                        {key !== 'none' && option.extraCostPerPerson && (
-                                                            <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
-                                                                +{formatPrice(option.extraCostPerPerson)}/person
-                                                            </span>
-                                                        )}
-                                                        {key === 'none' && (
-                                                            <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">
-                                                                Free
-                                                            </span>
-                                                        )}
+                                <div className="space-y-6">
+                                    {/* Deluxe Category */}
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                            <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
+                                            Deluxe Category
+                                        </h3>
+                                        <div className="space-y-3">
+                                            {Object.entries(destination.accommodationOptions)
+                                                .filter(([_, option]) => option.category === 'deluxe')
+                                                .map(([key, option]) => (
+                                                    <div
+                                                        key={key}
+                                                        className={`p-4 border rounded-lg cursor-pointer transition-all ${selection.accommodation === key
+                                                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                                                            : 'border-gray-200 hover:border-blue-300 hover:shadow-sm'
+                                                            }`}
+                                                        onClick={() => handleInputChange('accommodation', key)}
+                                                    >
+                                                        <div className="flex justify-between items-start">
+                                                            <div className="flex-1 pr-4">
+                                                                <div className="flex items-center gap-2 mb-2">
+                                                                    <h4 className="font-semibold text-gray-900">{option.name}</h4>
+                                                                    {option.extraCostPerPerson && option.extraCostPerPerson > 0 && (
+                                                                        <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                                                            +{formatPrice(option.extraCostPerPerson)}/person
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-sm text-gray-600 mb-3">{option.description}</p>
+                                                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                                                                    {option.amenities?.map((amenity: string, index: number) => (
+                                                                        <div key={index} className="flex items-center gap-1">
+                                                                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                                                            {amenity}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="text-xl font-bold text-blue-600">{formatPrice(option.pricePerNight)}</p>
+                                                                <p className="text-sm text-gray-500">per night</p>
+                                                                {option.extraCostPerPerson && option.extraCostPerPerson > 0 && (
+                                                                    <p className="text-xs text-orange-600 mt-1">+{formatPrice(option.extraCostPerPerson)}/person</p>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <p className="text-sm text-gray-600">{option.description}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="font-semibold">{option.pricePerNight > 0 ? formatPrice(option.pricePerNight) : 'Free'}{option.pricePerNight > 0 ? '/night' : ''}</p>
-                                                    {key !== 'none' && option.extraCostPerPerson && (
-                                                        <p className="text-xs text-gray-500">Per person upgrade</p>
-                                                    )}
-                                                </div>
-                                            </div>
+                                                ))}
                                         </div>
-                                    ))}
+                                    </div>
+
+                                    {/* Superior Category */}
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                            <span className="w-3 h-3 bg-purple-500 rounded-full"></span>
+                                            Superior Category
+                                        </h3>
+                                        <div className="space-y-3">
+                                            {Object.entries(destination.accommodationOptions)
+                                                .filter(([_, option]) => option.category === 'superior')
+                                                .map(([key, option]) => (
+                                                    <div
+                                                        key={key}
+                                                        className={`p-4 border rounded-lg cursor-pointer transition-all ${selection.accommodation === key
+                                                            ? 'border-purple-500 bg-purple-50 shadow-md'
+                                                            : 'border-gray-200 hover:border-purple-300 hover:shadow-sm'
+                                                            }`}
+                                                        onClick={() => handleInputChange('accommodation', key)}
+                                                    >
+                                                        <div className="flex justify-between items-start">
+                                                            <div className="flex-1 pr-4">
+                                                                <div className="flex items-center gap-2 mb-2">
+                                                                    <h4 className="font-semibold text-gray-900">{option.name}</h4>
+                                                                    {option.extraCostPerPerson && option.extraCostPerPerson > 0 && (
+                                                                        <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                                                            +{formatPrice(option.extraCostPerPerson)}/person
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-sm text-gray-600 mb-3">{option.description}</p>
+                                                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                                                                    {option.amenities?.map((amenity: string, index: number) => (
+                                                                        <div key={index} className="flex items-center gap-1">
+                                                                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                                                            {amenity}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="text-xl font-bold text-purple-600">{formatPrice(option.pricePerNight)}</p>
+                                                                <p className="text-sm text-gray-500">per night</p>
+                                                                {option.extraCostPerPerson && option.extraCostPerPerson > 0 && (
+                                                                    <p className="text-xs text-orange-600 mt-1">+{formatPrice(option.extraCostPerPerson)}/person</p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Luxury Category */}
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                            <span className="w-3 h-3 bg-gold-500 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"></span>
+                                            Luxury Category
+                                        </h3>
+                                        <div className="space-y-3">
+                                            {Object.entries(destination.accommodationOptions)
+                                                .filter(([_, option]) => option.category === 'luxury')
+                                                .map(([key, option]) => (
+                                                    <div
+                                                        key={key}
+                                                        className={`p-4 border rounded-lg cursor-pointer transition-all ${selection.accommodation === key
+                                                            ? 'border-yellow-500 bg-yellow-50 shadow-md'
+                                                            : 'border-gray-200 hover:border-yellow-300 hover:shadow-sm'
+                                                            }`}
+                                                        onClick={() => handleInputChange('accommodation', key)}
+                                                    >
+                                                        <div className="flex justify-between items-start">
+                                                            <div className="flex-1 pr-4">
+                                                                <div className="flex items-center gap-2 mb-2">
+                                                                    <h4 className="font-semibold text-gray-900">{option.name}</h4>
+                                                                    {option.extraCostPerPerson && option.extraCostPerPerson > 0 && (
+                                                                        <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                                                            +{formatPrice(option.extraCostPerPerson)}/person
+                                                                        </span>
+                                                                    )}
+                                                                    <span className="text-xs bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-2 py-1 rounded-full">
+                                                                        Premium
+                                                                    </span>
+                                                                </div>
+                                                                <p className="text-sm text-gray-600 mb-3">{option.description}</p>
+                                                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                                                                    {option.amenities?.map((amenity: string, index: number) => (
+                                                                        <div key={index} className="flex items-center gap-1">
+                                                                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                                                            {amenity}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="text-xl font-bold text-yellow-600">{formatPrice(option.pricePerNight)}</p>
+                                                                <p className="text-sm text-gray-500">per night</p>
+                                                                {option.extraCostPerPerson && option.extraCostPerPerson > 0 && (
+                                                                    <p className="text-xs text-orange-600 mt-1">+{formatPrice(option.extraCostPerPerson)}/person</p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        )}
+                        {!isAccommodationNeeded && (
+                            <CardContent>
+                                <div className="text-center py-6 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <p className="text-sm text-yellow-700 font-medium mb-2">Day Tours Only</p>
+                                    <p className="text-xs text-yellow-600">
+                                        You've selected only day tour packages ({totalDays} day{totalDays > 1 ? 's' : ''}, 0 nights).
+                                        No accommodation is required for your itinerary.
+                                    </p>
                                 </div>
                             </CardContent>
                         )}
