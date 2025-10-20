@@ -873,95 +873,49 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                         >
                             {tourPackages.map((pkg: TourPackage) => (
-                                <div key={pkg.id} className="flex-none w-80 sm:w-[420px] relative h-[400px] sm:h-[480px] perspective-1000">
-                                    <div className="flip-card w-full h-full relative transform-style-preserve-3d transition-transform duration-700 hover:rotate-y-180">
-                                        {/* Front of Card */}
-                                        <div className="flip-card-front absolute w-full h-full backface-hidden">
-                                            <Card className="h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                                                {/* Image Container */}
-                                                <div
-                                                    className="h-44 sm:h-56 relative overflow-hidden bg-cover bg-center"
-                                                    style={{
-                                                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${pkg.image})`
-                                                    }}
-                                                >
-                                                    {/* Duration Badge */}
-                                                    <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
-                                                        <span className="text-sm font-semibold text-gray-900">
-                                                            {pkg.duration} Day{pkg.duration > 1 ? 's' : ''}
-                                                        </span>
-                                                    </div>
+                                <div key={pkg.id} className="flex-none w-80 sm:w-[420px]">
+                                    <Card className="h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                        {/* Image Container */}
+                                        <div
+                                            className="h-44 sm:h-56 relative overflow-hidden bg-cover bg-center"
+                                            style={{
+                                                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${pkg.image})`
+                                            }}
+                                        >
+                                            {/* Duration Badge */}
+                                            <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
+                                                <span className="text-sm font-semibold text-gray-900">
+                                                    {pkg.duration} Day{pkg.duration > 1 ? 's' : ''}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <CardContent className="p-6">
+                                            <h3 className="text-xl font-bold text-gray-900 mb-3">{pkg.name}</h3>
+                                            <p className="text-gray-600 text-sm mb-4 line-clamp-3">{pkg.description}</p>
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="text-2xl font-bold text-orange-600">
+                                                    ₹{pkg.price.toLocaleString()}
+                                                    <span className="text-sm text-gray-500 font-normal">/person</span>
                                                 </div>
-                                                <CardContent className="p-6">
-                                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{pkg.name}</h3>
-                                                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{pkg.description}</p>
-                                                    <div className="flex items-center justify-between mb-4">
-                                                        <div className="text-2xl font-bold text-orange-600">
-                                                            ₹{pkg.price.toLocaleString()}
-                                                            <span className="text-sm text-gray-500 font-normal">/person</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-center">
-                                                        <span className="text-sm text-gray-500 italic">Hover to see details</span>
-                                                    </div>
-                                                </CardContent>
-                                            </Card>
-                                        </div>
+                                            </div>
 
-                                        {/* Back of Card */}
-                                        <div className="flip-card-back absolute w-full h-full backface-hidden rotate-y-180">
-                                            <Card className="h-full overflow-hidden shadow-lg">
-                                                <CardContent className="p-6 h-full flex flex-col">
-                                                    <h3 className="text-lg font-bold text-gray-900 mb-4">{pkg.name}</h3>
-
-                                                    {/* Inclusions */}
-                                                    <div className="mb-4 flex-1">
-                                                        <h4 className="font-semibold text-green-600 mb-2 flex items-center">
-                                                            <span className="mr-2">✓</span>
-                                                            Inclusions
-                                                        </h4>
-                                                        <ul className="text-sm text-gray-600 space-y-1">
-                                                            {pkg.inclusions.slice(0, 6).map((item: string, index: number) => (
-                                                                <li key={index} className="flex items-start">
-                                                                    <span className="text-green-500 mr-2 mt-1">•</span>
-                                                                    {item}
-                                                                </li>
-                                                            ))}
-                                                            {pkg.inclusions.length > 6 && (
-                                                                <li className="text-gray-400 text-xs">
-                                                                    +{pkg.inclusions.length - 6} more items
-                                                                </li>
-                                                            )}
-                                                        </ul>
-                                                    </div>
-
-                                                    {/* Exclusions */}
-                                                    <div className="mb-4">
-                                                        <h4 className="font-semibold text-red-600 mb-2 flex items-center">
-                                                            <span className="mr-2">✗</span>
-                                                            Exclusions
-                                                        </h4>
-                                                        <ul className="text-sm text-gray-600 space-y-1">
-                                                            {pkg.exclusions.slice(0, 4).map((item: string, index: number) => (
-                                                                <li key={index} className="flex items-start">
-                                                                    <span className="text-red-500 mr-2 mt-1">•</span>
-                                                                    {item}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-
-                                                    {/* Book Now Button */}
-                                                    <button
-                                                        onClick={onStartBooking}
-                                                        className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold"
-                                                    >
-                                                        Book Now - ₹{pkg.price.toLocaleString()}
-                                                    </button>
-                                                </CardContent>
-                                            </Card>
-                                        </div>
-                                    </div>
+                                            {/* Action Buttons */}
+                                            <div className="space-y-2">
+                                                <a
+                                                    href={`/tour-package/${pkg.id}`}
+                                                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-center block"
+                                                >
+                                                    More Details
+                                                </a>
+                                                <button
+                                                    onClick={onStartBooking}
+                                                    className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors font-semibold"
+                                                >
+                                                    Book Now
+                                                </button>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
                                 </div>
                             ))}
                         </div>
