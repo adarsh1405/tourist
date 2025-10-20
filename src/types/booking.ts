@@ -91,6 +91,7 @@ export interface BookingSelection {
 export interface PriceBreakdown {
     basePackagePrice: number;
     accommodationPrice: number;
+    accommodationUpgradeCost: number;
     mealPrice: number;
     addOnPrice: number;
     subtotal: number;
@@ -106,4 +107,5 @@ export interface PriceBreakdown {
         totalAccommodationCost: number;
     };
     childrenDiscount: number;
+    childrenAccommodationDiscount: number;
 }

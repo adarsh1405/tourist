@@ -878,24 +878,18 @@ const HomePage: React.FC<HomePageProps> = ({ onStartBooking }) => {
                                         {/* Front of Card */}
                                         <div className="flip-card-front absolute w-full h-full backface-hidden">
                                             <Card className="h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                                {/* Image Container */}
                                                 <div
-                                                    className="h-44 sm:h-56 bg-gradient-to-br from-blue-200 to-orange-200 flex items-center justify-center relative"
+                                                    className="h-44 sm:h-56 relative overflow-hidden bg-cover bg-center"
                                                     style={{
-                                                        backgroundImage: pkg.image ? `url(${pkg.image})` : undefined,
-                                                        backgroundSize: 'cover',
-                                                        backgroundPosition: 'center'
+                                                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${pkg.image})`
                                                     }}
                                                 >
-                                                    {/* Fallback content if image doesn't load */}
-                                                    {!pkg.image && (
-                                                        <div className="text-center text-white">
-                                                            <MapPin className="h-12 w-12 mx-auto mb-2" />
-                                                            <p className="text-sm font-medium">Tour Package</p>
-                                                        </div>
-                                                    )}
-                                                    <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                                                    {/* Duration Badge */}
                                                     <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
-                                                        <span className="text-sm font-semibold text-gray-900">{pkg.duration} Day{pkg.duration > 1 ? 's' : ''}</span>
+                                                        <span className="text-sm font-semibold text-gray-900">
+                                                            {pkg.duration} Day{pkg.duration > 1 ? 's' : ''}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <CardContent className="p-6">

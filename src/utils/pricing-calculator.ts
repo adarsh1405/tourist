@@ -50,6 +50,8 @@ export class PricingCalculator {
         const accommodation = destination.accommodationOptions[selection.accommodation];
         let accommodationPrice = 0;
         let accommodationUpgradeCost = 0;
+        let childrenAccommodationDiscount = 0;
+
         const roomDetails = {
             totalRooms: selection.numberOfRooms,
             peoplePerRoom: [] as number[],
@@ -61,22 +63,35 @@ export class PricingCalculator {
             // Calculate room allocation (max 3 people per room)
             const totalPeople = selection.numberOfPeople + selection.numberOfChildren;
             roomDetails.peoplePerRoom = this.calculateRoomAllocation(totalPeople, selection.numberOfRooms);
+
+            // Base accommodation cost (room rate × nights × rooms)
             accommodationPrice = accommodation.pricePerNight * nights * selection.numberOfRooms;
 
-            // Add per-person upgrade cost
+            // Calculate upgrade cost for room amenities (if applicable)
             if (accommodation.extraCostPerPerson) {
-                accommodationUpgradeCost = accommodation.extraCostPerPerson * totalPeople * nights;
-                accommodationPrice += accommodationUpgradeCost;
+                // Full upgrade cost for adults
+                const adultUpgradeCost = accommodation.extraCostPerPerson * selection.numberOfPeople * nights;
+
+                // 50% discount for children on upgrade costs
+                const childrenUpgradeCost = accommodation.extraCostPerPerson * selection.numberOfChildren * nights * 0.5;
+
+                // Calculate the discount amount (what children save)
+                childrenAccommodationDiscount = accommodation.extraCostPerPerson * selection.numberOfChildren * nights * 0.5;
+
+                // Total upgrade cost after children discount
+                accommodationUpgradeCost = adultUpgradeCost + childrenUpgradeCost;
             }
 
-            roomDetails.totalAccommodationCost = accommodationPrice;
+            roomDetails.totalAccommodationCost = accommodationPrice + accommodationUpgradeCost;
         }
 
         // Calculate meal price (children under 11 get 50% discount)
         const meal = destination.mealOptions[selection.meals];
-        const adultMealPrice = meal.pricePerDay * days * (selection.numberOfPeople - selection.numberOfChildren);
+        const adultMealPrice = meal.pricePerDay * days * (selection.numberOfPeople);
         const childMealPrice = meal.pricePerDay * days * selection.numberOfChildren * 0.5;
-        const mealPrice = adultMealPrice + childMealPrice;        // Calculate add-on services price (including transportation)
+        const mealPrice = adultMealPrice + childMealPrice;
+
+        // Calculate add-on services price (including transportation)
         let addOnPrice = 0;
 
         selection.addOns.forEach(addOnKey => {
@@ -108,10 +123,10 @@ export class PricingCalculator {
             return total;
         }, 0);
         const childrenMealDiscount = meal.pricePerDay * days * selection.numberOfChildren * 0.5;
-        const childrenDiscount = childrenPackageDiscount + childrenMealDiscount;
+        const childrenDiscount = childrenPackageDiscount + childrenMealDiscount + childrenAccommodationDiscount;
 
-        // Calculate subtotal
-        const subtotal = basePackagePrice + accommodationPrice + mealPrice + addOnPrice;
+        // Calculate subtotal (base package includes accommodation, only add upgrade cost)
+        const subtotal = basePackagePrice + accommodationUpgradeCost + mealPrice + addOnPrice;
 
         // Apply seasonal pricing
         const seasonalMultiplier = this.config.seasonalPricing[selection.season]?.multiplier || 1;
@@ -133,6 +148,7 @@ export class PricingCalculator {
         return {
             basePackagePrice,
             accommodationPrice,
+            accommodationUpgradeCost,
             mealPrice,
             addOnPrice,
             subtotal,
@@ -142,7 +158,8 @@ export class PricingCalculator {
             finalTotal,
             pricePerPerson,
             roomDetails,
-            childrenDiscount
+            childrenDiscount,
+            childrenAccommodationDiscount
         };
     }
 

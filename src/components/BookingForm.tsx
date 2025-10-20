@@ -70,6 +70,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
             setPriceBreakdown(null);
         }
     }, [
+        selection,
         selection.startDate,
         selection.selectedPackages,
         selection.numberOfPeople,
@@ -139,7 +140,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                     : 'No packages selected'; case 'accommodation':
                 const acc = destination.accommodationOptions[selection.accommodation];
                 if (selection.accommodation === 'none') {
-                    return 'No accommodation - Day tours only';
+                    return '';
                 }
                 return `${acc.name}${acc.extraCostPerPerson && acc.extraCostPerPerson > 0 ? ` (+${formatPrice(acc.extraCostPerPerson)}/person)` : ''} - ${formatPrice(acc.pricePerNight)}/night`;
             case 'addOns':
@@ -512,11 +513,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                 <div className="flex items-center gap-2">
                                     <Bed className="h-5 w-5" />
                                     Accommodation
-                                    {!isAccommodationNeeded && (
-                                        <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full ml-2">
-                                            Upgrade your stays
-                                        </span>
-                                    )}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {!expandedCards.accommodation && (
@@ -545,7 +541,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                         </h3>
                                         <div className="space-y-3">
                                             {Object.entries(destination.accommodationOptions)
-                                                .filter(([_, option]) => option.category === 'deluxe')
+                                                .filter(([, option]) => option.category === 'deluxe')
                                                 .map(([key, option]) => (
                                                     <div
                                                         key={key}
@@ -596,7 +592,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                         </h3>
                                         <div className="space-y-3">
                                             {Object.entries(destination.accommodationOptions)
-                                                .filter(([_, option]) => option.category === 'superior')
+                                                .filter(([, option]) => option.category === 'superior')
                                                 .map(([key, option]) => (
                                                     <div
                                                         key={key}
@@ -647,7 +643,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                         </h3>
                                         <div className="space-y-3">
                                             {Object.entries(destination.accommodationOptions)
-                                                .filter(([_, option]) => option.category === 'luxury')
+                                                .filter(([, option]) => option.category === 'luxury')
                                                 .map(([key, option]) => (
                                                     <div
                                                         key={key}
@@ -697,11 +693,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                         )}
                         {!isAccommodationNeeded && (
                             <CardContent>
-                                <div className="text-center py-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                    <p className="text-sm text-yellow-700 font-medium mb-2">Day Tours Only</p>
-                                    <p className="text-xs text-yellow-600">
-                                        You've selected only day tour packages ({totalDays} day{totalDays > 1 ? 's' : ''}, 0 nights).
-                                        No accommodation is required for your itinerary.
+                                <div className="text-center py-6 bg-grey-50 border border-black-200 rounded-lg">
+                                    <p className="text-sm text-gray-700 font-bold mb-2">Upgrade Your Experience</p>
+                                    <p className="text-sm text-gray-600">
+                                        Please select a package to view upgrade options <br />
+                                        Current selection: ({totalDays} day{totalDays > 1 ? 's' : ''}, 0 nights).
                                     </p>
                                 </div>
                             </CardContent>
@@ -824,10 +820,18 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                                 {totalNights > 0 && `, ${totalNights} night${totalNights > 1 ? 's' : ''}`}
                                             </div>
                                         </div>
-                                        <div className="flex justify-between items-start">
-                                            <span className="text-sm sm:text-base">Accommodation {selection.accommodation !== 'none' ? 'Upgrade' : ''}</span>
-                                            <span className="font-medium text-sm sm:text-base">{priceBreakdown.accommodationPrice > 0 ? formatPrice(priceBreakdown.accommodationPrice) : 'Not Selected'}</span>
-                                        </div>
+                                        {priceBreakdown.accommodationUpgradeCost > 0 && (
+                                            <div className="flex justify-between items-start">
+                                                <span className="text-sm sm:text-base">Room Upgrade Cost</span>
+                                                <span className="font-medium text-sm sm:text-base">{formatPrice(priceBreakdown.accommodationUpgradeCost)}</span>
+                                            </div>
+                                        )}
+                                        {priceBreakdown.childrenAccommodationDiscount > 0 && (
+                                            <div className="flex justify-between items-start text-green-600">
+                                                <span className="text-sm sm:text-base">Children Room Upgrade Discount (50%)</span>
+                                                <span className="font-medium text-sm sm:text-base">-{formatPrice(priceBreakdown.childrenAccommodationDiscount)}</span>
+                                            </div>
+                                        )}
                                         {priceBreakdown.accommodationPrice > 0 && (
                                             <div className="text-sm text-gray-600 ml-4">
                                                 • {destination.accommodationOptions[selection.accommodation].name} - {destination.accommodationOptions[selection.accommodation].description}
@@ -835,6 +839,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBackToHome }) => {
                                                 {destination.accommodationOptions[selection.accommodation].extraCostPerPerson && (
                                                     <>
                                                         <br />• Upgrade cost: {formatPrice(destination.accommodationOptions[selection.accommodation].extraCostPerPerson!)}/person/night
+                                                        {selection.numberOfChildren > 0 && (
+                                                            <span className="text-green-600"> (Children get 50% off)</span>
+                                                        )}
                                                     </>
                                                 )}
                                                 <br />• Room allocation: {priceBreakdown.roomDetails.peoplePerRoom.map((people, index) =>
